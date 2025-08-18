@@ -11,6 +11,10 @@ on:
     paths:
       - 'slides/**'
 
+concurrency:
+  group: pages-${{ github.ref }}
+  cancel-in-progress: false
+
 jobs:
   build-preview:
     runs-on: ubuntu-latest
