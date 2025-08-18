@@ -58,14 +58,27 @@ jobs:
             # Get changed files in PR
             CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep '^slides/' || true)
           else
-            # Get changed files in push
-            # Use the before/after commit from GitHub context
-            if [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ]; then
-              # Normal push: compare with previous commit
+            # Get changed files in push with robust error handling
+            echo "Before commit: ${{ github.event.before }}"
+            echo "After commit: ${{ github.event.after }}"
+            
+            # Check if both commits exist and are valid
+            if [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ] && \
+               git cat-file -e "${{ github.event.before }}" 2>/dev/null && \
+               git cat-file -e "${{ github.event.after }}" 2>/dev/null; then
+              # Normal push: compare with previous commit using GitHub context
+              echo "Using GitHub event context for diff"
               CHANGED_FILES=$(git diff --name-only ${{ github.event.before }}...${{ github.event.after }} | grep '^slides/' || true)
             else
-              # Initial push: get all files in current commit that are in slides/
-              CHANGED_FILES=$(git ls-files slides/ || true)
+              # Fallback: use HEAD~1 or show command for single commit
+              echo "Fallback to HEAD-based diff detection"
+              if git rev-parse --verify HEAD~1 >/dev/null 2>&1; then
+                # Multiple commits: compare with previous
+                CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD | grep '^slides/' || true)
+              else
+                # Single commit: get files changed in this commit
+                CHANGED_FILES=$(git show --name-only --pretty=format: HEAD | grep '^slides/' || true)
+              fi
             fi
           fi
           
@@ -74,8 +87,11 @@ jobs:
           
           echo "Debug info:"
           echo "Event: ${{ github.event_name }}"
-          echo "Changed files: $CHANGED_FILES"
-          echo "Changed slide directories: $SLIDE_DIRS"
+          echo "Changed files:"
+          echo "$CHANGED_FILES"
+          echo "Changed slide directories:"
+          echo "$SLIDE_DIRS"
+          echo "Number of changed directories: $(echo "$SLIDE_DIRS" | wc -l)"
           
           # Save to output
           echo "dirs<<EOF" >> $GITHUB_OUTPUT
