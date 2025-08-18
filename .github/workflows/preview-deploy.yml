@@ -10,6 +10,13 @@ on:
       - main
     paths:
       - 'slides/**'
+  workflow_dispatch:
+    inputs:
+      rebuild_all:
+        description: 'Rebuild all slides (normally only changed slides are built)'
+        required: false
+        default: false
+        type: boolean
 
 concurrency:
   group: pages-${{ github.ref }}
@@ -67,17 +74,20 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
       
       - name: Build slides
+        if: steps.changed.outputs.dirs != '' || github.event_name == 'workflow_dispatch'
         run: |
           # Create output directory
           mkdir -p build
           
-          # Find all slide directories for building
-          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
-            # On main branch, build all slides
+          # Determine directories to build
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
+            # Manual trigger: build all slides
             DIRS_TO_BUILD=$(find slides -type d -name "20*" -maxdepth 1 2>/dev/null || true)
+            echo "🔄 Manual trigger: Building all slides"
           else
-            # On PR, build only changed slides
+            # Automatic: build only changed slides
             DIRS_TO_BUILD="${{ steps.changed.outputs.dirs }}"
+            echo "⚡ Building only changed slides"
           fi
           
           # Process slide directories
