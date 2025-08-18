@@ -126,7 +126,7 @@ jobs:
               
               # Generate HTML only
               echo "Generating HTML..."
-              marp "$dir/slide.md" --html --output "$OUTPUT_DIR/index.html"
+              marp "$dir/slide.md" --output "$OUTPUT_DIR/index.html"
               
               # Copy images if exists
               if [ -d "$dir/images" ]; then
