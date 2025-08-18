@@ -1,0 +1,188 @@
+name: Generate Slides from Issue
+
+on:
+  issues:
+    types: [opened]
+
+jobs:
+  generate-slide:
+    if: contains(github.event.issue.labels.*.name, 'slide-request')
+    runs-on: ubuntu-latest
+    
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      
+      - name: Install dependencies
+        run: |
+          npm install
+      
+      - name: Parse issue and generate slide
+        id: generate
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const path = require('path');
+            
+            // Parse issue body
+            const issueBody = context.payload.issue.body;
+            const issueNumber = context.payload.issue.number;
+            
+            // Extract fields from issue template
+            const extractField = (fieldName) => {
+              const regex = new RegExp(`### ${fieldName}[\\s\\S]*?(?:###|$)`);
+              const match = issueBody.match(regex);
+              if (!match) return '';
+              return match[0].replace(new RegExp(`### ${fieldName}\\s*`), '')
+                            .replace(/### .*$/m, '')
+                            .trim();
+            };
+            
+            // Parse the form data
+            const title = extractField('📝 プレゼンタイトル（英数字とハイフンのみ）');
+            const titleJa = extractField('📋 プレゼンタイトル（日本語）');
+            const theme = extractField('🎨 テーマ').replace(/（.*）/, '').toLowerCase();
+            const duration = extractField('⏱️ 発表時間').match(/\d+/)[0];
+            const presenter = extractField('👤 発表者名');
+            const organization = extractField('🏢 所属組織（任意）');
+            const date = extractField('📅 発表日') || new Date().toISOString().split('T')[0];
+            const content = extractField('📝 スライド内容');
+            const speakerNotes = extractField('💬 全体的なスピーカーノート（任意）');
+            
+            // Create directory name
+            const today = new Date().toISOString().split('T')[0];
+            const dirName = `${today}-${title}`;
+            const slideDir = path.join('slides', dirName);
+            
+            // Create directories
+            fs.mkdirSync(slideDir, { recursive: true });
+            fs.mkdirSync(path.join(slideDir, 'images'), { recursive: true });
+            
+            // Generate slide content
+            let slideContent = `---
+marp: true
+theme: ${theme === 'default' ? 'default' : theme}
+paginate: true
+---
+
+# ${titleJa}
+
+${organization ? `${presenter} - ${organization}` : presenter}
+${date}
+
+---
+
+`;
+            
+            // Add content from issue
+            if (content) {
+              slideContent += content;
+            } else {
+              // Use template based on duration
+              const templatePath = path.join('templates', `${duration}min-template.md`);
+              if (fs.existsSync(templatePath)) {
+                const template = fs.readFileSync(templatePath, 'utf8');
+                slideContent += template.split('---').slice(2).join('---');
+              }
+            }
+            
+            // Add global speaker notes if provided
+            if (speakerNotes) {
+              slideContent += `\n\n<!-- 
+全体メモ:
+${speakerNotes}
+-->`;
+            }
+            
+            // Write slide file
+            const slidePath = path.join(slideDir, 'slide.md');
+            fs.writeFileSync(slidePath, slideContent);
+            
+            // Output for next steps
+            core.setOutput('slide_dir', dirName);
+            core.setOutput('slide_title', titleJa);
+            core.setOutput('issue_number', issueNumber);
+            
+            return { dirName, titleJa };
+      
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: |
+            feat: Add new slide "${{ steps.generate.outputs.slide_title }}"
+            
+            - Created from issue #${{ steps.generate.outputs.issue_number }}
+            - Directory: slides/${{ steps.generate.outputs.slide_dir }}
+            
+            Closes #${{ steps.generate.outputs.issue_number }}
+          branch: slides/${{ steps.generate.outputs.slide_dir }}
+          title: "📊 New Slide: ${{ steps.generate.outputs.slide_title }}"
+          body: |
+            ## 📊 新しいスライドを作成しました
+            
+            **タイトル**: ${{ steps.generate.outputs.slide_title }}
+            **ディレクトリ**: `slides/${{ steps.generate.outputs.slide_dir }}/`
+            **Issue**: #${{ steps.generate.outputs.issue_number }}
+            
+            ### 📝 次のステップ
+            
+            1. このPRをレビューしてください
+            2. 必要に応じてスライド内容を編集してください
+            3. マージすると自動的にHTML/PDFが生成されます
+            
+            ### 🔗 プレビュー
+            
+            マージ後、以下のURLでプレビューが確認できます：
+            - HTML: `https://[your-username].github.io/[repo-name]/slides/${{ steps.generate.outputs.slide_dir }}/`
+            
+            ---
+            
+            *This PR was automatically generated from issue #${{ steps.generate.outputs.issue_number }}*
+          labels: |
+            slides
+            automated
+          assignees: ${{ github.actor }}
+      
+      - name: Comment on issue
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const issueNumber = ${{ steps.generate.outputs.issue_number }};
+            await github.rest.issues.createComment({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              body: `## ✅ スライドの生成が完了しました！
+              
+              Pull Requestが作成されました。以下のリンクから確認してください：
+              
+              🔗 **Pull Request**: #${context.payload.pull_request?.number || 'Creating...'}
+              📁 **ディレクトリ**: \`slides/${{ steps.generate.outputs.slide_dir }}/\`
+              
+              ### 次のアクション
+              1. PRをレビューして、必要に応じて編集
+              2. PRをマージしてHTML/PDFを自動生成
+              3. GitHub Pagesでプレビューを確認
+              
+              ご不明な点があれば、このIssueでお知らせください。`
+            });
+            
+            // Close the issue
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: issueNumber,
+              state: 'closed'
+            });
