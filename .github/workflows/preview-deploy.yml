@@ -126,10 +126,10 @@ jobs:
               
               # Generate HTML and PDF with configuration file
               echo "Generating HTML..."
-              marp "$dir/slide.md" --html --output "$OUTPUT_DIR/index.html"
+              marp "$dir/slide.md" --html --output-dir "$OUTPUT_DIR"
               
               echo "Generating PDF..."  
-              marp "$dir/slide.md" --pdf --output "$OUTPUT_DIR/slide.pdf"
+              marp "$dir/slide.md" --pdf --output-dir "$OUTPUT_DIR"
               
               # Copy images if exists
               if [ -d "$dir/images" ]; then
