@@ -39,26 +39,35 @@ jobs:
             const issueBody = context.payload.issue.body;
             const issueNumber = context.payload.issue.number;
             
+            console.log('Issue body:');
+            console.log(issueBody);
+            console.log('---');
+            
             // Extract fields from issue template
             const extractField = (fieldName) => {
-              const regex = new RegExp('### ' + fieldName + '[\\s\\S]*?(?:###|$)');
+              const regex = new RegExp('### ' + fieldName.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '\\s*\\n\\s*(.+?)\\s*(?:\\n### |\\n\\n|$)', 's');
               const match = issueBody.match(regex);
-              if (!match) return '';
-              return match[0].replace(new RegExp('### ' + fieldName + '\\s*'), '')
-                            .replace(/### .*$/m, '')
-                            .trim();
+              if (!match) {
+                console.log(`Field "${fieldName}" not found in issue body`);
+                return '';
+              }
+              const value = match[1].trim();
+              console.log(`Extracted "${fieldName}": "${value}"`);
+              return value;
             };
             
             // Parse the form data
             const title = extractField('📝 プレゼンタイトル（英数字とハイフンのみ）');
             const titleJa = extractField('📋 プレゼンタイトル（日本語）');
-            const theme = extractField('🎨 テーマ').replace(/（.*）/, '').toLowerCase();
-            const duration = extractField('⏱️ 発表時間').match(/\d+/)[0];
+            const themeRaw = extractField('🎨 テーマ');
+            const theme = themeRaw.toLowerCase().trim();
+            const durationRaw = extractField('⏱️ 発表時間');
+            const durationMatch = durationRaw.match(/(\d+)/);
+            const duration = durationMatch ? durationMatch[1] : '10';
             const presenter = extractField('👤 発表者名');
             const organization = extractField('🏢 所属組織（任意）');
             const date = extractField('📅 発表日') || new Date().toISOString().split('T')[0];
             const content = extractField('📝 スライド内容');
-            const speakerNotes = extractField('💬 全体的なスピーカーノート（任意）');
             
             // Create directory name
             const today = new Date().toISOString().split('T')[0];
@@ -92,13 +101,6 @@ jobs:
               }
             }
             
-            // Add global speaker notes if provided
-            if (speakerNotes) {
-              slideContent += '\n\n<!-- \n' +
-                '全体メモ:\n' +
-                speakerNotes + '\n' +
-                '-->';
-            }
             
             // Write slide file
             const slidePath = path.join(slideDir, 'slide.md');
