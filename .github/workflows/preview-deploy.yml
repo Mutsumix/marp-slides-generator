@@ -111,32 +111,35 @@ jobs:
               mkdir -p "$OUTPUT_DIR"
               echo "Output directory: $OUTPUT_DIR"
               
+              # Test Marp command first
+              echo "Testing Marp CLI..."
+              marp --version || echo "Marp CLI not found or error"
+              
+              # Check file exists and is readable
+              if [ ! -f "$dir/slide.md" ]; then
+                echo "Error: Slide file not found: $dir/slide.md"
+                continue
+              fi
+              
+              echo "File content check:"
+              head -n 5 "$dir/slide.md"
+              
               # Generate HTML with speaker notes
+              echo "Generating HTML..."
               if [ -d "./themes" ]; then
-                marp "$dir/slide.md" \
-                  --html \
-                  --allow-local-files \
-                  --theme-set ./themes \
-                  -o "$OUTPUT_DIR/index.html"
-                
-                # Generate PDF
-                marp "$dir/slide.md" \
-                  --pdf \
-                  --allow-local-files \
-                  --theme-set ./themes \
-                  -o "$OUTPUT_DIR/slide.pdf"
+                echo "Using themes directory"
+                marp --html --allow-local-files --theme-set ./themes --output "$OUTPUT_DIR/index.html" "$dir/slide.md"
               else
-                echo "Themes directory not found, building without custom themes"
-                marp "$dir/slide.md" \
-                  --html \
-                  --allow-local-files \
-                  -o "$OUTPUT_DIR/index.html"
-                
-                # Generate PDF
-                marp "$dir/slide.md" \
-                  --pdf \
-                  --allow-local-files \
-                  -o "$OUTPUT_DIR/slide.pdf"
+                echo "Building without custom themes"
+                marp --html --allow-local-files --output "$OUTPUT_DIR/index.html" "$dir/slide.md"
+              fi
+              
+              # Generate PDF
+              echo "Generating PDF..."
+              if [ -d "./themes" ]; then
+                marp --pdf --allow-local-files --theme-set ./themes --output "$OUTPUT_DIR/slide.pdf" "$dir/slide.md"
+              else
+                marp --pdf --allow-local-files --output "$OUTPUT_DIR/slide.pdf" "$dir/slide.md"
               fi
               
               # Copy images if exists
