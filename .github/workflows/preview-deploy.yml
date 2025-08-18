@@ -107,22 +107,26 @@ jobs:
             fi
           done
       
-      - name: Ensure build directory with default content
+      - name: Generate slides index page
         if: github.ref == 'refs/heads/main'
         run: |
           mkdir -p build
-          if [ ! -f build/index.html ]; then
-            cat > build/index.html << 'EOF'
+          
+          # Find all slide directories
+          SLIDE_DIRS=$(find slides -type d -name "20*" -maxdepth 1 2>/dev/null | sort -r || true)
+          
+          # Generate index.html with slides list
+          cat > build/index.html << 'EOF'
           <!DOCTYPE html>
           <html lang="ja">
           <head>
             <meta charset="UTF-8">
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <title>Marp Slides Generator</title>
+            <title>Marp Slides Generator - スライド一覧</title>
             <style>
               body {
                 font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                max-width: 800px;
+                max-width: 1000px;
                 margin: 0 auto;
                 padding: 2rem;
                 background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
@@ -130,33 +134,187 @@ jobs:
               }
               .container {
                 background: white;
+                border-radius: 15px;
+                padding: 3rem;
+                box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+              }
+              h1 { 
+                color: #333; 
+                text-align: center;
+                margin-bottom: 2rem;
+                font-size: 2.5rem;
+              }
+              .slides-grid {
+                display: grid;
+                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+                gap: 2rem;
+                margin: 2rem 0;
+              }
+              .slide-card {
+                background: #f8f9fa;
+                border-radius: 10px;
+                padding: 1.5rem;
+                border-left: 4px solid #667eea;
+                transition: all 0.3s ease;
+              }
+              .slide-card:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+              }
+              .slide-title {
+                font-size: 1.2rem;
+                font-weight: 600;
+                color: #333;
+                margin-bottom: 0.5rem;
+              }
+              .slide-date {
+                color: #666;
+                font-size: 0.9rem;
+                margin-bottom: 1rem;
+              }
+              .slide-links {
+                display: flex;
+                gap: 1rem;
+              }
+              .slide-links a {
+                padding: 0.5rem 1rem;
+                border-radius: 6px;
+                text-decoration: none;
+                font-weight: 500;
+                transition: all 0.2s ease;
+              }
+              .html-link {
+                background: #667eea;
+                color: white;
+              }
+              .html-link:hover {
+                background: #5a67d8;
+              }
+              .pdf-link {
+                background: #e53e3e;
+                color: white;
+              }
+              .pdf-link:hover {
+                background: #c53030;
+              }
+              .no-slides {
+                text-align: center;
+                color: #666;
+                margin: 2rem 0;
+              }
+              .create-guide {
+                background: #e6fffa;
                 border-radius: 10px;
                 padding: 2rem;
-                box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+                margin-top: 2rem;
+                border-left: 4px solid #319795;
               }
-              h1 { color: #333; }
-              p { color: #666; line-height: 1.6; }
-              a { color: #667eea; text-decoration: none; }
-              a:hover { text-decoration: underline; }
+              .create-guide h3 {
+                color: #2d3748;
+                margin-top: 0;
+              }
+              .create-guide ol li {
+                margin: 0.5rem 0;
+                color: #4a5568;
+              }
+              .footer {
+                text-align: center;
+                margin-top: 3rem;
+                padding-top: 2rem;
+                border-top: 1px solid #e2e8f0;
+              }
+              .footer a {
+                color: #667eea;
+                text-decoration: none;
+                font-weight: 500;
+              }
+              .footer a:hover {
+                text-decoration: underline;
+              }
             </style>
           </head>
           <body>
             <div class="container">
               <h1>📊 Marp Slides Generator</h1>
-              <p>まだスライドがありません。</p>
-              <p>スライドを作成するには：</p>
-              <ol>
-                <li><a href="https://github.com/Mutsumix/marp-slides-generator/issues/new/choose">Issue を作成</a></li>
-                <li>フォームに必要事項を記入</li>
-                <li>AIでコンテンツを生成して貼り付け</li>
-                <li>自動的にPRが作成されます</li>
-              </ol>
-              <p><a href="https://github.com/Mutsumix/marp-slides-generator">→ リポジトリを見る</a></p>
+          EOF
+          
+          # Add slides list or no-slides message
+          if [ -n "$SLIDE_DIRS" ]; then
+            echo '      <div class="slides-grid">' >> build/index.html
+            
+            for dir in $SLIDE_DIRS; do
+              # Extract date and title from directory name
+              BASENAME=$(basename "$dir")
+              DATE_PART=$(echo "$BASENAME" | cut -d'-' -f1-3)
+              TITLE_PART=$(echo "$BASENAME" | cut -d'-' -f4- | tr '-' ' ')
+              
+              # Format date
+              YEAR=$(echo "$DATE_PART" | cut -d'-' -f1)
+              MONTH=$(echo "$DATE_PART" | cut -d'-' -f2)
+              DAY=$(echo "$DATE_PART" | cut -d'-' -f3)
+              FORMATTED_DATE="$YEAR年${MONTH}月${DAY}日"
+              
+              # Check if built files exist
+              HTML_EXISTS=""
+              PDF_EXISTS=""
+              if [ -f "build/$dir/index.html" ]; then
+                HTML_EXISTS="true"
+              fi
+              if [ -f "build/$dir/slide.pdf" ]; then
+                PDF_EXISTS="true"
+              fi
+              
+              cat >> build/index.html << EOF
+                <div class="slide-card">
+                  <div class="slide-title">$TITLE_PART</div>
+                  <div class="slide-date">$FORMATTED_DATE</div>
+                  <div class="slide-links">
+              EOF
+              
+              if [ "$HTML_EXISTS" = "true" ]; then
+                echo "            <a href=\"$dir/index.html\" class=\"html-link\">📄 HTML</a>" >> build/index.html
+              fi
+              if [ "$PDF_EXISTS" = "true" ]; then
+                echo "            <a href=\"$dir/slide.pdf\" class=\"pdf-link\">📑 PDF</a>" >> build/index.html
+              fi
+              if [ -z "$HTML_EXISTS" ] && [ -z "$PDF_EXISTS" ]; then
+                echo "            <span style=\"color: #999;\">ビルド待ち...</span>" >> build/index.html
+              fi
+              
+              echo '          </div>' >> build/index.html
+              echo '        </div>' >> build/index.html
+            done
+            
+            echo '      </div>' >> build/index.html
+          else
+            cat >> build/index.html << 'EOF'
+              <div class="no-slides">
+                <p>📭 まだスライドがありません</p>
+              </div>
+          EOF
+          fi
+          
+          # Add footer with creation guide
+          cat >> build/index.html << 'EOF'
+              
+              <div class="create-guide">
+                <h3>🚀 新しいスライドを作成する</h3>
+                <ol>
+                  <li><a href="https://github.com/Mutsumix/marp-slides-generator/issues/new/choose">📝 Issue を作成</a></li>
+                  <li>フォームに必要事項を記入</li>
+                  <li>AIでコンテンツを生成して貼り付け</li>
+                  <li>@claude メンションで自動作成開始</li>
+                  <li>Pull Request が自動生成されます</li>
+                </ol>
+              </div>
+              
+              <div class="footer">
+                <p><a href="https://github.com/Mutsumix/marp-slides-generator">📁 GitHub リポジトリを見る</a></p>
+              </div>
             </div>
           </body>
           </html>
           EOF
-          fi
       
       - name: Setup Pages (for main branch)
         if: github.ref == 'refs/heads/main'
@@ -196,15 +354,20 @@ jobs:
             
             for (const dir of changedDirs) {
               const slideName = dir.replace('slides/', '');
-              comment += `### 📁 ${slideName}\n`;
-              comment += `- 📄 HTMLプレビュー: アーティファクトからダウンロード可能\n`;
-              comment += `- 📑 PDF: アーティファクトからダウンロード可能\n\n`;
+              const displayName = slideName.substring(11).replace(/-/g, ' '); // Remove date prefix and replace hyphens
+              const dateStr = slideName.substring(0, 10);
+              
+              comment += `### 📁 ${displayName}\n`;
+              comment += `**作成日:** ${dateStr}\n\n`;
+              comment += `**マージ後のアクセス先:**\n`;
+              comment += `- 📄 [HTMLスライド](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${dir}/)\n`;
+              comment += `- 📑 [PDFダウンロード](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${dir}/slide.pdf)\n\n`;
+              comment += `*プレビュー: アーティファクトからダウンロード可能*\n\n`;
+              comment += `---\n\n`;
             }
             
-            comment += `---\n\n`;
-            comment += `**マージ後のプレビューURL:**\n`;
-            comment += `https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/\n\n`;
-            comment += `*注: マージ後、GitHub Pagesで公開されます*`;
+            comment += `**📋 [全スライド一覧を見る](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/)**\n\n`;
+            comment += `*注: マージ後、上記リンクでアクセス可能になります*`;
             
             // Find existing comment
             const { data: comments } = await github.rest.issues.listComments({

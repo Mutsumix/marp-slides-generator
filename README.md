@@ -2,6 +2,12 @@
 
 「軽率にスライドを作成しよう」 - Marp + GitHub Actions + Claudeを使った自動スライド生成システム
 
+## 🌐 ライブデモ
+
+📋 **[スライド一覧を見る](https://mutsumix.github.io/marp-slides-generator/)** - 作成されたスライドの確認とプレビュー
+
+🚀 **[新しいスライドを作成する](https://github.com/Mutsumix/marp-slides-generator/issues/new/choose)** - Issue作成で自動生成開始
+
 ## 🎯 概要
 
 このツールは、GitHub IssuesでAI（Claude/ChatGPT）が生成したコンテンツを貼り付けるだけで、自動的にプレゼンテーションスライドを作成し、GitHub Actionsでビルド・デプロイするシステムです。
@@ -28,7 +34,7 @@
 2. **📊 新規スライド作成** テンプレートを選択
 3. フォームに必要事項を入力：
    - プレゼンタイトル
-   - テーマ（business/tech/casual）
+   - テーマ（standard/business/casual）
    - 発表時間（5分/10分/30分）
    - AIで生成したコンテンツ
 
@@ -75,7 +81,7 @@ Claude/ChatGPTに以下のようなプロンプトを使用：
 │       └── output/         # 生成物
 ├── images/                  # 共通画像リソース
 ├── scripts/                 # ユーティリティスクリプト
-├── themes/                  # Marpテーマ（今後追加予定）
+├── themes/                  # Marpテーマ（standard/business/casual）
 ├── CLAUDE.md               # スライド作成ガイドライン
 └── marp.config.js          # Marp設定
 
