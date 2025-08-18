@@ -1,40 +1,30 @@
-name: Build and Deploy Preview
+name: Build and Deploy Slides
 
 on:
-  pull_request:
-    types: [opened, synchronize]
-    paths:
-      - 'slides/**'
   push:
     branches:
       - main
     paths:
-      - 'slides/**'
-  workflow_dispatch:
-    inputs:
-      rebuild_all:
-        description: 'Rebuild all slides (normally only changed slides are built)'
-        required: false
-        default: false
-        type: boolean
+      - 'slides/**/*.md'
 
 concurrency:
   group: pages-${{ github.ref }}
   cancel-in-progress: false
 
 jobs:
-  build-preview:
+  build-deploy:
     runs-on: ubuntu-latest
     
     permissions:
       contents: read
-      pull-requests: write
       pages: write
       id-token: write
     
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -42,123 +32,46 @@ jobs:
           node-version: '20'
       
       - name: Install Marp CLI
-        run: |
-          npm install -g @marp-team/marp-cli@latest
-      
-      - name: Install dependencies
-        run: |
-          if [ -f package.json ]; then
-            npm install
-          fi
+        run: npm install -g @marp-team/marp-cli@latest
       
       - name: Find changed slides
-        id: changed
+        id: files
         run: |
-          if [ "${{ github.event_name }}" = "pull_request" ]; then
-            # Get changed files in PR
-            CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep '^slides/' || true)
-          else
-            # Get changed files in push with robust error handling
-            echo "Before commit: ${{ github.event.before }}"
-            echo "After commit: ${{ github.event.after }}"
-            
-            # Check if both commits exist and are valid
-            if [ "${{ github.event.before }}" != "0000000000000000000000000000000000000000" ] && \
-               git cat-file -e "${{ github.event.before }}" 2>/dev/null && \
-               git cat-file -e "${{ github.event.after }}" 2>/dev/null; then
-              # Normal push: compare with previous commit using GitHub context
-              echo "Using GitHub event context for diff"
-              CHANGED_FILES=$(git diff --name-only ${{ github.event.before }}...${{ github.event.after }} | grep '^slides/' || true)
-            else
-              # Fallback: use HEAD~1 or show command for single commit
-              echo "Fallback to HEAD-based diff detection"
-              if git rev-parse --verify HEAD~1 >/dev/null 2>&1; then
-                # Multiple commits: compare with previous
-                CHANGED_FILES=$(git diff --name-only HEAD~1 HEAD | grep '^slides/' || true)
-              else
-                # Single commit: get files changed in this commit
-                CHANGED_FILES=$(git show --name-only --pretty=format: HEAD | grep '^slides/' || true)
-              fi
-            fi
-          fi
-          
-          # Extract unique slide directories
-          SLIDE_DIRS=$(echo "$CHANGED_FILES" | sed 's|/[^/]*$||' | sort -u | grep '^slides/' || true)
-          
-          echo "Debug info:"
-          echo "Event: ${{ github.event_name }}"
-          echo "Changed files:"
-          echo "$CHANGED_FILES"
-          echo "Changed slide directories:"
-          echo "$SLIDE_DIRS"
-          echo "Number of changed directories: $(echo "$SLIDE_DIRS" | wc -l)"
-          
-          # Save to output
-          echo "dirs<<EOF" >> $GITHUB_OUTPUT
-          echo "$SLIDE_DIRS" >> $GITHUB_OUTPUT
+          echo "files<<EOF" >> $GITHUB_OUTPUT
+          (git diff --name-only HEAD^ HEAD | grep -E "slides/.*\.md$" || true) >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
       
-      - name: Build slides
-        if: steps.changed.outputs.dirs != '' || github.event_name == 'workflow_dispatch'
+      - name: Build HTML slides
+        if: steps.files.outputs.files != ''
         run: |
-          # Create output directory
           mkdir -p build
           
-          # Determine directories to build
-          if [ "${{ github.event_name }}" = "workflow_dispatch" ]; then
-            # Manual trigger: build all slides
-            DIRS_TO_BUILD=$(find slides -type d -name "20*" -maxdepth 1 2>/dev/null || true)
-            echo "🔄 Manual trigger: Building all slides"
-          else
-            # Automatic: build only changed slides
-            DIRS_TO_BUILD="${{ steps.changed.outputs.dirs }}"
-            echo "⚡ Building only changed slides"
-          fi
+          echo "Building slides:"
+          echo "${{ steps.files.outputs.files }}"
+          echo ""
           
-          # Process slide directories
-          echo "$DIRS_TO_BUILD" | while read -r dir; do
-            if [ -n "$dir" ] && [ -f "$dir/slide.md" ]; then
-              echo "Building $dir..."
-              echo "Current directory: $(pwd)"
-              echo "Input file: $dir/slide.md"
-              ls -la "$dir/"
-              
-              # Create output directory for this slide
-              OUTPUT_DIR="build/$dir"
-              mkdir -p "$OUTPUT_DIR"
-              echo "Output directory: $OUTPUT_DIR"
-              
-              # Test Marp command first
-              echo "Testing Marp CLI..."
-              marp --version || echo "Marp CLI not found or error"
-              
-              # Check file exists and is readable
-              if [ ! -f "$dir/slide.md" ]; then
-                echo "Error: Slide file not found: $dir/slide.md"
-                continue
-              fi
-              
-              echo "File content check:"
-              head -n 5 "$dir/slide.md"
-              
-              # Generate HTML only with latest Marp CLI
-              echo "Generating HTML..."
-              marp --html "$dir/slide.md" --output "$OUTPUT_DIR/index.html" --allow-local-files
-              
-              # Copy images if exists
-              if [ -d "$dir/images" ]; then
-                cp -r "$dir/images" "$OUTPUT_DIR/"
-              fi
-              
-              # Copy to source directory for persistence
-              cp -r "$OUTPUT_DIR"/* "$dir/output/" 2>/dev/null || mkdir -p "$dir/output" && cp -r "$OUTPUT_DIR"/* "$dir/output/"
-              
-              echo "✅ Built: $dir"
+          echo "${{ steps.files.outputs.files }}" | while IFS= read -r file; do
+            if [ -z "$file" ] || [ ! -f "$file" ]; then
+              continue
             fi
+            
+            echo "Building: $file"
+            slide_dir=$(dirname "$file")
+            output_dir="build/$slide_dir"
+            mkdir -p "$output_dir"
+            
+            # Generate HTML only
+            marp --html "$file" --allow-local-files -o "$output_dir/index.html"
+            
+            # Copy images if exists
+            if [ -d "$slide_dir/images" ]; then
+              cp -r "$slide_dir/images" "$output_dir/"
+            fi
+            
+            echo "✅ Built: $output_dir/index.html"
           done
       
       - name: Generate slides index page
-        if: github.ref == 'refs/heads/main'
         run: |
           mkdir -p build
           
@@ -222,64 +135,22 @@ jobs:
                 font-size: 0.9rem;
                 margin-bottom: 1rem;
               }
-              .slide-links {
-                display: flex;
-                gap: 1rem;
-              }
               .slide-links a {
                 padding: 0.5rem 1rem;
                 border-radius: 6px;
                 text-decoration: none;
                 font-weight: 500;
-                transition: all 0.2s ease;
-              }
-              .html-link {
                 background: #667eea;
                 color: white;
+                transition: all 0.2s ease;
               }
-              .html-link:hover {
+              .slide-links a:hover {
                 background: #5a67d8;
-              }
-              .pdf-link {
-                background: #e53e3e;
-                color: white;
-              }
-              .pdf-link:hover {
-                background: #c53030;
               }
               .no-slides {
                 text-align: center;
                 color: #666;
                 margin: 2rem 0;
-              }
-              .create-guide {
-                background: #e6fffa;
-                border-radius: 10px;
-                padding: 2rem;
-                margin-top: 2rem;
-                border-left: 4px solid #319795;
-              }
-              .create-guide h3 {
-                color: #2d3748;
-                margin-top: 0;
-              }
-              .create-guide ol li {
-                margin: 0.5rem 0;
-                color: #4a5568;
-              }
-              .footer {
-                text-align: center;
-                margin-top: 3rem;
-                padding-top: 2rem;
-                border-top: 1px solid #e2e8f0;
-              }
-              .footer a {
-                color: #667eea;
-                text-decoration: none;
-                font-weight: 500;
-              }
-              .footer a:hover {
-                text-decoration: underline;
               }
             </style>
           </head>
@@ -306,12 +177,8 @@ jobs:
               
               # Check if built files exist
               HTML_EXISTS=""
-              PDF_EXISTS=""
               if [ -f "build/$dir/index.html" ]; then
                 HTML_EXISTS="true"
-              fi
-              if [ -f "build/$dir/slide.pdf" ]; then
-                PDF_EXISTS="true"
               fi
               
               echo '        <div class="slide-card">' >> build/index.html
@@ -320,12 +187,8 @@ jobs:
               echo '          <div class="slide-links">' >> build/index.html
               
               if [ "$HTML_EXISTS" = "true" ]; then
-                echo "            <a href=\"$dir/index.html\" class=\"html-link\">📄 HTML</a>" >> build/index.html
-              fi
-              if [ "$PDF_EXISTS" = "true" ]; then
-                echo "            <a href=\"$dir/slide.pdf\" class=\"pdf-link\">📑 PDF</a>" >> build/index.html
-              fi
-              if [ -z "$HTML_EXISTS" ] && [ -z "$PDF_EXISTS" ]; then
+                echo "            <a href=\"$dir/index.html\">📄 HTMLスライド</a>" >> build/index.html
+              else
                 echo "            <span style=\"color: #999;\">ビルド待ち...</span>" >> build/index.html
               fi
               
@@ -342,107 +205,21 @@ jobs:
           EOF
           fi
           
-          # Add footer with creation guide
+          # Add footer
           cat >> build/index.html << 'EOF'
-              
-              <div class="create-guide">
-                <h3>🚀 新しいスライドを作成する</h3>
-                <ol>
-                  <li><a href="https://github.com/Mutsumix/marp-slides-generator/issues/new/choose">📝 Issue を作成</a></li>
-                  <li>フォームに必要事項を記入</li>
-                  <li>AIでコンテンツを生成して貼り付け</li>
-                  <li>@claude メンションで自動作成開始</li>
-                  <li>Pull Request が自動生成されます</li>
-                </ol>
-              </div>
-              
-              <div class="footer">
-                <p><a href="https://github.com/Mutsumix/marp-slides-generator">📁 GitHub リポジトリを見る</a></p>
-              </div>
             </div>
           </body>
           </html>
           EOF
       
-      - name: Setup Pages (for main branch)
-        if: github.ref == 'refs/heads/main'
+      - name: Setup Pages
         uses: actions/configure-pages@v4
       
-      - name: Upload artifact (for main branch)
-        if: github.ref == 'refs/heads/main'
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: ./build
       
-      - name: Deploy to GitHub Pages (for main branch)
-        if: github.ref == 'refs/heads/main'
+      - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
-      
-      - name: Upload preview artifacts (for PR)
-        if: github.event_name == 'pull_request'
-        uses: actions/upload-artifact@v4
-        with:
-          name: slide-preview-${{ github.event.pull_request.number }}
-          path: build/
-          retention-days: 7
-      
-      - name: Comment PR with preview info
-        if: github.event_name == 'pull_request'
-        uses: actions/github-script@v7
-        with:
-          script: |
-            const prNumber = context.payload.pull_request.number;
-            const changedDirs = `${{ steps.changed.outputs.dirs }}`.split('\n').filter(Boolean);
-            
-            if (changedDirs.length === 0) return;
-            
-            let comment = `## 📊 スライドプレビュー\n\n`;
-            comment += `以下のスライドがビルドされました：\n\n`;
-            
-            for (const dir of changedDirs) {
-              const slideName = dir.replace('slides/', '');
-              const displayName = slideName.substring(11).replace(/-/g, ' '); // Remove date prefix and replace hyphens
-              const dateStr = slideName.substring(0, 10);
-              
-              comment += `### 📁 ${displayName}\n`;
-              comment += `**作成日:** ${dateStr}\n\n`;
-              comment += `**マージ後のアクセス先:**\n`;
-              comment += `- 📄 [HTMLスライド](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${dir}/)\n`;
-              comment += `- 📑 [PDFダウンロード](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/${dir}/slide.pdf)\n\n`;
-              comment += `*プレビュー: アーティファクトからダウンロード可能*\n\n`;
-              comment += `---\n\n`;
-            }
-            
-            comment += `**📋 [全スライド一覧を見る](https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/)**\n\n`;
-            comment += `*注: マージ後、上記リンクでアクセス可能になります*`;
-            
-            // Find existing comment
-            const { data: comments } = await github.rest.issues.listComments({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              issue_number: prNumber,
-            });
-            
-            const botComment = comments.find(comment => 
-              comment.user.type === 'Bot' && 
-              comment.body.includes('## 📊 スライドプレビュー')
-            );
-            
-            if (botComment) {
-              // Update existing comment
-              await github.rest.issues.updateComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                comment_id: botComment.id,
-                body: comment
-              });
-            } else {
-              // Create new comment
-              await github.rest.issues.createComment({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                issue_number: prNumber,
-                body: comment
-              });
-            }
