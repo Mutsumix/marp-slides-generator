@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: 📚 ドキュメント
+    url: https://github.com/Mutsumix/marp-slides-generator#readme
+    about: 使い方やガイドラインについて
+  - name: 🤖 Claude for GitHub
+    url: https://github.com/marketplace/claude-for-github
+    about: IssueでClaudeを呼び出すためのMarketplaceアプリ
+  - name: 💡 アイディア・要望
+    url: https://github.com/Mutsumix/marp-slides-generator/discussions
+    about: 新機能のアイディアや要望はDiscussionsで
