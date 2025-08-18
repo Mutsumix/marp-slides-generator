@@ -42,9 +42,9 @@ body:
       description: プレゼンテーションのスタイルを選択してください
       options:
         - default
-        - business
-        - tech
-        - casual
+        - ビジネス
+        - 技術系LT
+        - 社内の発表
       default: 0
     validations:
       required: true
@@ -146,18 +146,6 @@ body:
       required: true
 
   - type: textarea
-    id: speaker_notes_global
-    attributes:
-      label: 💬 全体的なスピーカーノート（任意）
-      description: プレゼンテーション全体に関する注意事項や補足情報
-      placeholder: |
-        - 想定質問と回答
-        - 時間配分の詳細
-        - デモの準備事項
-    validations:
-      required: false
-
-  - type: textarea
     id: resources
     attributes:
       label: 🔗 参考リソース（任意）
@@ -183,16 +171,3 @@ body:
           required: false
         - label: HTMLにスピーカーノートを含める
           required: false
-
-  - type: checkboxes
-    id: confirmation
-    attributes:
-      label: ✅ 確認事項
-      description: 以下の項目を確認してください
-      options:
-        - label: CLAUDE.mdのガイドラインを確認しました
-          required: true
-        - label: AIで生成した内容を確認・編集しました
-          required: true
-        - label: 著作権に問題がないことを確認しました
-          required: true
