@@ -1,16 +1,19 @@
 ---
 marp: true
-theme: default
+theme: standard
+size: 16:9
 paginate: true
 ---
 
+<!-- _class: cover -->
+
 # タイトル
 
-サブタイトル
+## サブタイトル・概要
 
-発表者: [名前]
-所属: [組織名]
-日付: [YYYY-MM-DD]
+### 発表者: [名前]
+#### 所属: [組織名]
+#### 日付: [YYYY-MM-DD]
 
 ---
 

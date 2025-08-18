@@ -41,10 +41,9 @@ body:
       label: 🎨 テーマ
       description: プレゼンテーションのスタイルを選択してください
       options:
-        - default
-        - ビジネス
-        - 技術系LT
-        - 社内の発表
+        - standard
+        - business
+        - casual
       default: 0
     validations:
       required: true

@@ -1,0 +1,308 @@
+/* @theme business */
+
+@import 'default';
+
+section {
+  align-content: start;
+  font-size: 26px;
+  background-repeat: no-repeat;
+  font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #f8f9fa;
+  line-height: 1.1;
+  padding-top: 2rem;
+}
+
+/* ビジネス向けの縦棒デザイン - ダークブルー */
+section h1 {
+  color: #1c2833;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 1rem;
+}
+
+section h1::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background: linear-gradient(180deg, #1f4e79 0%, #17365d 100%);
+  border-radius: 4px;
+}
+
+section h2 {
+  color: #2c3e50;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  border-bottom: 2px solid #e8eaed;
+  padding-bottom: 0.5rem;
+}
+
+section h3 {
+  color: #34495e;
+  font-weight: 500;
+}
+
+section strong {
+  color: #1f4e79;
+  font-weight: 700;
+}
+
+section li {
+  margin: 0.6rem 0;
+}
+
+section pre {
+  background: linear-gradient(135deg, #f0f4f8 0%, #d6e9f0 100%);
+  border-radius: 8px;
+  padding: 1.2rem;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border: 1px solid #d1d9e6;
+  font-size: 0.85em;
+}
+
+section code {
+  background: #f4f6f8;
+  padding: 0.2rem 0.5rem;
+  border-radius: 3px;
+  font-family: 'SF Mono', 'Monaco', 'Consolas', monospace;
+  color: #1f4e79;
+  border: 1px solid #e1e8ed;
+}
+
+/* ビジネス向け表紙ページ */
+section.cover {
+  background: linear-gradient(135deg, #1f4e79 0%, #17365d 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+}
+
+section.cover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grid" width="10" height="10" patternUnits="userSpaceOnUse"><path d="M 10 0 L 0 0 0 10" fill="none" stroke="rgba(255,255,255,0.03)" stroke-width="0.5"/></pattern></defs><rect width="100%" height="100%" fill="url(%23grid)" /></svg>');
+  opacity: 0.1;
+}
+
+section.cover h1 {
+  color: white;
+  font-size: 3.2rem;
+  margin-bottom: 2rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+  font-weight: 700;
+  z-index: 1;
+  position: relative;
+}
+
+section.cover h1::before {
+  display: none;
+}
+
+section.cover h2 {
+  color: rgba(255,255,255,0.95);
+  font-size: 1.4rem;
+  margin-top: 1rem;
+  border: none;
+  z-index: 1;
+  position: relative;
+}
+
+/* ビジネス向けセクションタイトル */
+section.section-title {
+  background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+section.section-title h1 {
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  border-bottom: 3px solid #f39c12;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+  width: fit-content;
+  position: static;
+  padding-left: 0;
+}
+
+section.section-title h1::before {
+  display: none;
+}
+
+/* 2列レイアウト */
+.two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2.5rem;
+  align-items: start;
+}
+
+/* 3列レイアウト */
+.three-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* ビジネス向けメトリックカード */
+.metric-card {
+  background: white;
+  border-radius: 8px;
+  padding: 32px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.12);
+  transition: all 0.3s ease;
+  border: 1px solid #e8eaed;
+}
+
+.metric-card:hover {
+  box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+  transform: translateY(-2px);
+}
+
+/* プロフェッショナルな戦略グリッド */
+.strategy-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 30px;
+}
+
+.strategy-grid > div {
+  background: white;
+  border-radius: 8px;
+  padding: 24px;
+  border-left: 4px solid #1f4e79;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+/* ビジネステーブルスタイル */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  background: white;
+  border-radius: 8px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #e8eaed;
+}
+
+th {
+  background-color: #1f4e79;
+  color: white;
+  font-weight: 600;
+  font-size: 0.9em;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.comparison-matrix th {
+  background-color: #1f4e79;
+  color: white;
+}
+
+tr:nth-child(even) {
+  background-color: #fafbfc;
+}
+
+tr:hover {
+  background-color: #f0f4f8;
+}
+
+/* ビジネス向け引用ブロック */
+section blockquote {
+  background: linear-gradient(135deg, #fafbfc 0%, #f0f4f8 100%);
+  border-left: 6px solid #1f4e79;
+  margin: 2rem 0;
+  padding: 1.5rem 2rem;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  position: relative;
+  font-style: italic;
+  color: #2c3e50;
+  line-height: 1.6;
+}
+
+section blockquote::before {
+  content: '"';
+  font-size: 4rem;
+  color: #1f4e79;
+  opacity: 0.2;
+  position: absolute;
+  top: -0.5rem;
+  left: 1.5rem;
+  font-family: Georgia, serif;
+  line-height: 1;
+}
+
+section blockquote p {
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  font-weight: 500;
+}
+
+section blockquote cite {
+  display: block;
+  text-align: right;
+  margin-top: 1rem;
+  font-style: normal;
+  font-size: 0.9em;
+  color: #5d6d7e;
+  font-weight: 600;
+}
+
+section blockquote cite::before {
+  content: '— ';
+}
+
+/* 数値強調スタイル */
+.big-number {
+  font-size: 4.5rem;
+  font-weight: 700;
+  color: #1f4e79;
+  text-align: center;
+  margin: 1rem 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
+}
+
+/* プロフェッショナルなリストスタイル */
+section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+section ul li {
+  position: relative;
+  padding-left: 2rem;
+}
+
+section ul li::before {
+  content: '▶';
+  position: absolute;
+  left: 0;
+  color: #1f4e79;
+  font-weight: bold;
+}

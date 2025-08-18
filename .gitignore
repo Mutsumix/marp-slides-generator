@@ -31,3 +31,5 @@ Thumbs.db
 # GitHub Pages build
 _site/
 .jekyll-cache/
+
+ref/

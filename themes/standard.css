@@ -1,0 +1,220 @@
+/* @theme standard */
+
+@import 'default';
+
+section {
+  align-content: start;
+  font-size: 28px;
+  background-repeat: no-repeat;
+  font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #fafafa;
+  line-height: 1;
+  padding-top: 2rem;
+}
+
+/* 縦棒デザイン */
+section h1 {
+  color: #2c3e50;
+  font-weight: 500;
+  margin-bottom: 1rem;
+  position: relative;
+  padding-left: 1rem;
+}
+
+section h1::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 6px;
+  background: linear-gradient(180deg, #3498db 0%, #2980b9 100%);
+  border-radius: 3px;
+}
+
+section h2 {
+  color: #34495e;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+}
+
+section h3 {
+  color: #7f8c8d;
+  font-weight: 500;
+}
+
+section strong {
+  color: #3498db;
+  font-weight: 600;
+}
+
+section li {
+  margin: 0.8rem 0;
+}
+
+section pre {
+  background: linear-gradient(135deg, #e8ecf4 0%, #9fbcea 100%);
+  border-radius: 10px;
+  padding: 1rem;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e1e8ed;
+  font-size: 0.9em;
+}
+
+section code {
+  background: #fafaf8;
+  padding: 0.2rem 0.4rem;
+  border-radius: 4px;
+  font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+  color: #3498db;
+}
+
+/* 表紙ページの背景 */
+section.cover {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+section.cover h1 {
+  color: white;
+  font-size: 3rem;
+  margin-bottom: 2rem;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+}
+
+section.cover h1::before {
+  background: rgba(255,255,255,0.8);
+}
+
+section.cover h2 {
+  color: rgba(255,255,255,0.9);
+  font-size: 1.5rem;
+  margin-top: 1rem;
+}
+
+/* グラデーション背景の大項目スライド */
+section.section-title {
+  background: linear-gradient(135deg, #1e3c72 0%, #2a5298 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+}
+
+section.section-title h1 {
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  border-bottom: 3px solid rgba(255,255,255,0.8);
+  padding-bottom: 0.5rem;
+  display: inline-block;
+  width: fit-content;
+  position: static;
+  padding-left: 0;
+}
+
+section.section-title h1::before {
+  display: none;
+}
+
+/* 2列レイアウト */
+.two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* 3列レイアウト */
+.three-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* KPI表示用のメトリックカード */
+.metric-card {
+  background: white;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.08);
+  transition: all 0.3s ease;
+}
+
+/* McKinsey風の戦略グリッド */
+.strategy-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 40px;
+}
+
+/* データ比較用の表 */
+.comparison-matrix th {
+  background-color: #34495e;
+  color: white;
+}
+
+/* テーブルスタイル */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1rem 0;
+}
+
+th, td {
+  padding: 0.8rem;
+  text-align: left;
+  border-bottom: 1px solid #bdc3c7;
+}
+
+th {
+  background-color: #34495e;
+  color: white;
+  font-weight: 600;
+}
+
+tr:nth-child(even) {
+  background-color: #f8f9fa;
+}
+
+/* 引用ブロックスタイル */
+section blockquote {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-left: 6px solid #3498db;
+  margin: 1.5rem 0;
+  padding: 1.2rem 1.5rem;
+  border-radius: 0 8px 8px 0;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  position: relative;
+  font-style: italic;
+  color: #34495e;
+  line-height: 1.6;
+}
+
+section blockquote p {
+  margin: 0;
+  position: relative;
+  z-index: 1;
+}
+
+section blockquote cite {
+  display: block;
+  text-align: right;
+  margin-top: 1rem;
+  font-style: normal;
+  font-size: 0.9em;
+  color: #7f8c8d;
+}
+
+section blockquote cite::before {
+  content: '— ';
+}

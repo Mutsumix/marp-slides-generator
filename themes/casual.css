@@ -1,0 +1,384 @@
+/* @theme casual */
+
+@import 'default';
+
+section {
+  align-content: start;
+  font-size: 30px;
+  background-repeat: no-repeat;
+  font-family: 'Hiragino Sans', 'Hiragino Kaku Gothic ProN', 'Noto Sans JP', -apple-system, BlinkMacSystemFont, sans-serif;
+  background-color: #fef9e7;
+  line-height: 1.2;
+  padding-top: 2rem;
+}
+
+/* カジュアルな縦棒デザイン - 暖色系 */
+section h1 {
+  color: #d35400;
+  font-weight: 600;
+  margin-bottom: 1.2rem;
+  position: relative;
+  padding-left: 1.2rem;
+}
+
+section h1::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 8px;
+  background: linear-gradient(180deg, #f39c12 0%, #d68910 100%);
+  border-radius: 6px;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+section h2 {
+  color: #c0392b;
+  font-weight: 600;
+  margin-top: 2rem;
+  margin-bottom: 1rem;
+  text-decoration: underline;
+  text-decoration-color: #f39c12;
+  text-decoration-thickness: 3px;
+}
+
+section h3 {
+  color: #e67e22;
+  font-weight: 500;
+}
+
+section strong {
+  color: #c0392b;
+  font-weight: 700;
+  background: linear-gradient(120deg, transparent 0%, rgba(243, 156, 18, 0.2) 40%, rgba(243, 156, 18, 0.3) 60%, transparent 100%);
+  padding: 0.1rem 0.3rem;
+  border-radius: 3px;
+}
+
+section li {
+  margin: 1rem 0;
+}
+
+section pre {
+  background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  border: 2px solid #f39c12;
+  font-size: 0.9em;
+}
+
+section code {
+  background: #fff3cd;
+  padding: 0.3rem 0.5rem;
+  border-radius: 6px;
+  font-family: 'Fira Code', 'Monaco', 'Consolas', monospace;
+  color: #d35400;
+  border: 1px solid #f39c12;
+  box-shadow: inset 0 1px 2px rgba(0,0,0,0.1);
+}
+
+/* カジュアルな表紙ページ */
+section.cover {
+  background: linear-gradient(135deg, #ff9068 0%, #fd79a8 50%, #fdcb6e 100%);
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+
+section.cover::before {
+  content: '✨';
+  position: absolute;
+  top: 10%;
+  left: 10%;
+  font-size: 3rem;
+  opacity: 0.3;
+  animation: float 3s ease-in-out infinite;
+}
+
+section.cover::after {
+  content: '🎉';
+  position: absolute;
+  bottom: 15%;
+  right: 15%;
+  font-size: 2.5rem;
+  opacity: 0.4;
+  animation: float 3s ease-in-out infinite reverse;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+}
+
+section.cover h1 {
+  color: white;
+  font-size: 3.5rem;
+  margin-bottom: 2rem;
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.3);
+  font-weight: 700;
+  z-index: 1;
+  position: relative;
+  transform: rotate(-2deg);
+}
+
+section.cover h1::before {
+  display: none;
+}
+
+section.cover h2 {
+  color: rgba(255,255,255,0.95);
+  font-size: 1.6rem;
+  margin-top: 1rem;
+  text-decoration: none;
+  z-index: 1;
+  position: relative;
+  transform: rotate(1deg);
+}
+
+/* カジュアルなセクションタイトル */
+section.section-title {
+  background: linear-gradient(135deg, #74b9ff 0%, #0984e3 100%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  position: relative;
+}
+
+section.section-title::before {
+  content: '🚀';
+  position: absolute;
+  top: 10%;
+  right: 10%;
+  font-size: 2rem;
+  opacity: 0.6;
+}
+
+section.section-title h1 {
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  margin: 0;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+  border-bottom: 4px solid #fdcb6e;
+  padding-bottom: 0.5rem;
+  display: inline-block;
+  width: fit-content;
+  position: static;
+  padding-left: 0;
+  transform: rotate(-1deg);
+}
+
+section.section-title h1::before {
+  display: none;
+}
+
+/* 2列レイアウト */
+.two-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 2rem;
+  align-items: start;
+}
+
+/* 3列レイアウト */
+.three-columns {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+/* カジュアルなメトリックカード */
+.metric-card {
+  background: white;
+  border-radius: 16px;
+  padding: 2rem;
+  box-shadow: 0 8px 20px rgba(0,0,0,0.12);
+  transition: all 0.3s ease;
+  border: 3px solid #fdcb6e;
+  position: relative;
+  overflow: hidden;
+}
+
+.metric-card::before {
+  content: '';
+  position: absolute;
+  top: -50%;
+  left: -50%;
+  width: 200%;
+  height: 200%;
+  background: linear-gradient(45deg, transparent, rgba(243, 156, 18, 0.1), transparent);
+  transform: rotate(45deg);
+  transition: all 0.5s ease;
+  opacity: 0;
+}
+
+.metric-card:hover::before {
+  opacity: 1;
+  animation: shimmer 1.5s ease-in-out;
+}
+
+.metric-card:hover {
+  box-shadow: 0 12px 28px rgba(0,0,0,0.18);
+  transform: translateY(-4px) rotate(1deg);
+}
+
+@keyframes shimmer {
+  0% { transform: translateX(-100%) translateY(-100%) rotate(45deg); }
+  100% { transform: translateX(100%) translateY(100%) rotate(45deg); }
+}
+
+/* 楽しい戦略グリッド */
+.strategy-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 25px;
+}
+
+.strategy-grid > div {
+  background: linear-gradient(135deg, #fff 0%, #f8f9fa 100%);
+  border-radius: 12px;
+  padding: 1.5rem;
+  border-left: 6px solid #f39c12;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+  position: relative;
+  transform: rotate(0.5deg);
+  transition: transform 0.3s ease;
+}
+
+.strategy-grid > div:nth-child(even) {
+  transform: rotate(-0.5deg);
+}
+
+.strategy-grid > div:hover {
+  transform: rotate(0deg) scale(1.02);
+}
+
+/* カラフルなテーブル */
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 1.5rem 0;
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 6px 16px rgba(0,0,0,0.12);
+}
+
+th, td {
+  padding: 1rem;
+  text-align: left;
+  border-bottom: 1px solid #fee2e2;
+}
+
+th {
+  background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+  color: white;
+  font-weight: 600;
+  font-size: 0.9em;
+}
+
+.comparison-matrix th {
+  background: linear-gradient(135deg, #ff7675 0%, #fd79a8 100%);
+  color: white;
+}
+
+tr:nth-child(even) {
+  background: linear-gradient(135deg, #fef9e7 0%, #fff5b4 100%);
+}
+
+tr:hover {
+  background: linear-gradient(135deg, #fff3cd 0%, #ffeaa7 100%);
+  transform: scale(1.01);
+  transition: all 0.2s ease;
+}
+
+/* 楽しい引用ブロック */
+section blockquote {
+  background: linear-gradient(135deg, #fff 0%, #fef9e7 100%);
+  border-left: 6px solid #f39c12;
+  margin: 2rem 0;
+  padding: 1.5rem;
+  border-radius: 0 16px 16px 0;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.1);
+  position: relative;
+  font-style: italic;
+  color: #d35400;
+  line-height: 1.6;
+  transform: rotate(0.5deg);
+}
+
+section blockquote::before {
+  content: '💭';
+  font-size: 2rem;
+  position: absolute;
+  top: -0.5rem;
+  left: 1rem;
+  line-height: 1;
+}
+
+section blockquote p {
+  margin: 0;
+  position: relative;
+  z-index: 1;
+  margin-left: 2rem;
+}
+
+section blockquote cite {
+  display: block;
+  text-align: right;
+  margin-top: 1rem;
+  font-style: normal;
+  font-size: 0.9em;
+  color: #c0392b;
+  font-weight: 600;
+}
+
+section blockquote cite::before {
+  content: '— ';
+}
+
+/* 大きな数値 - カジュアル版 */
+.big-number {
+  font-size: 5rem;
+  font-weight: 800;
+  color: #e67e22;
+  text-align: center;
+  margin: 1rem 0;
+  text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
+  transform: rotate(-3deg);
+}
+
+/* 楽しいリストスタイル */
+section ul {
+  list-style: none;
+  padding-left: 0;
+}
+
+section ul li {
+  position: relative;
+  padding-left: 2.5rem;
+}
+
+section ul li::before {
+  content: '🌟';
+  position: absolute;
+  left: 0;
+  font-size: 1.2rem;
+}
+
+section ul li:nth-child(2n)::before {
+  content: '✨';
+}
+
+section ul li:nth-child(3n)::before {
+  content: '🎯';
+}
