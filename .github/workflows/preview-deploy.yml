@@ -43,7 +43,7 @@ jobs:
       
       - name: Install Marp CLI
         run: |
-          npm install -g @marp-team/marp-cli@3.4.0
+          npm install -g @marp-team/marp-cli@latest
       
       - name: Install dependencies
         run: |
@@ -124,9 +124,9 @@ jobs:
               echo "File content check:"
               head -n 5 "$dir/slide.md"
               
-              # Generate HTML only (without config file to avoid multiple file processing)
+              # Generate HTML only with latest Marp CLI
               echo "Generating HTML..."
-              marp --no-config "$dir/slide.md" --output "$OUTPUT_DIR/index.html"
+              marp --html "$dir/slide.md" --output "$OUTPUT_DIR/index.html" --allow-local-files
               
               # Copy images if exists
               if [ -d "$dir/images" ]; then
