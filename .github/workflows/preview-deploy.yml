@@ -264,16 +264,10 @@ jobs:
                 PDF_EXISTS="true"
               fi
               
-              cat >> build/index.html << 'CARD_START'
-                <div class="slide-card">
-              CARD_START
-              
-              echo "                  <div class=\"slide-title\">$TITLE_PART</div>" >> build/index.html
-              echo "                  <div class=\"slide-date\">$FORMATTED_DATE</div>" >> build/index.html
-              
-              cat >> build/index.html << 'LINKS_START'
-                  <div class="slide-links">
-              LINKS_START
+              echo '        <div class="slide-card">' >> build/index.html
+              echo "          <div class=\"slide-title\">$TITLE_PART</div>" >> build/index.html
+              echo "          <div class=\"slide-date\">$FORMATTED_DATE</div>" >> build/index.html
+              echo '          <div class="slide-links">' >> build/index.html
               
               if [ "$HTML_EXISTS" = "true" ]; then
                 echo "            <a href=\"$dir/index.html\" class=\"html-link\">📄 HTML</a>" >> build/index.html
