@@ -124,23 +124,16 @@ jobs:
               echo "File content check:"
               head -n 5 "$dir/slide.md"
               
-              # Generate HTML with speaker notes
-              echo "Generating HTML..."
-              if [ -d "./themes" ]; then
-                echo "Using themes directory"
-                marp --html --allow-local-files --theme-set ./themes --output "$OUTPUT_DIR/index.html" "$dir/slide.md"
-              else
-                echo "Building without custom themes"
-                marp --html --allow-local-files --output "$OUTPUT_DIR/index.html" "$dir/slide.md"
-              fi
+              # Generate HTML and PDF without custom themes first (simpler approach)
+              echo "Generating HTML (without custom themes)..."
+              marp slide.md --html --allow-local-files --input-dir "$dir" --output "$OUTPUT_DIR/index.html" || \
+              marp "$dir/slide.md" --html --allow-local-files -o "$OUTPUT_DIR/index.html" || \
+              npx @marp-team/marp-cli "$dir/slide.md" --html --allow-local-files -o "$OUTPUT_DIR/index.html"
               
-              # Generate PDF
-              echo "Generating PDF..."
-              if [ -d "./themes" ]; then
-                marp --pdf --allow-local-files --theme-set ./themes --output "$OUTPUT_DIR/slide.pdf" "$dir/slide.md"
-              else
-                marp --pdf --allow-local-files --output "$OUTPUT_DIR/slide.pdf" "$dir/slide.md"
-              fi
+              echo "Generating PDF (without custom themes)..."
+              marp slide.md --pdf --allow-local-files --input-dir "$dir" --output "$OUTPUT_DIR/slide.pdf" || \
+              marp "$dir/slide.md" --pdf --allow-local-files -o "$OUTPUT_DIR/slide.pdf" || \
+              npx @marp-team/marp-cli "$dir/slide.md" --pdf --allow-local-files -o "$OUTPUT_DIR/slide.pdf"
               
               # Copy images if exists
               if [ -d "$dir/images" ]; then
