@@ -41,10 +41,10 @@ jobs:
             
             // Extract fields from issue template
             const extractField = (fieldName) => {
-              const regex = new RegExp(`### ${fieldName}[\\s\\S]*?(?:###|$)`);
+              const regex = new RegExp('### ' + fieldName + '[\\s\\S]*?(?:###|$)');
               const match = issueBody.match(regex);
               if (!match) return '';
-              return match[0].replace(new RegExp(`### ${fieldName}\\s*`), '')
+              return match[0].replace(new RegExp('### ' + fieldName + '\\s*'), '')
                             .replace(/### .*$/m, '')
                             .trim();
             };
@@ -62,7 +62,7 @@ jobs:
             
             // Create directory name
             const today = new Date().toISOString().split('T')[0];
-            const dirName = `${today}-${title}`;
+            const dirName = today + '-' + title;
             const slideDir = path.join('slides', dirName);
             
             // Create directories
@@ -70,27 +70,22 @@ jobs:
             fs.mkdirSync(path.join(slideDir, 'images'), { recursive: true });
             
             // Generate slide content
-            let slideContent = `---
-marp: true
-theme: ${theme === 'default' ? 'default' : theme}
-paginate: true
----
-
-# ${titleJa}
-
-${organization ? `${presenter} - ${organization}` : presenter}
-${date}
-
----
-
-`;
+            let slideContent = '---\n' +
+              'marp: true\n' +
+              'theme: ' + (theme === 'default' ? 'default' : theme) + '\n' +
+              'paginate: true\n' +
+              '---\n\n' +
+              '# ' + titleJa + '\n\n' +
+              (organization ? presenter + ' - ' + organization : presenter) + '\n' +
+              date + '\n\n' +
+              '---\n\n';
             
             // Add content from issue
             if (content) {
               slideContent += content;
             } else {
               // Use template based on duration
-              const templatePath = path.join('templates', `${duration}min-template.md`);
+              const templatePath = path.join('templates', duration + 'min-template.md');
               if (fs.existsSync(templatePath)) {
                 const template = fs.readFileSync(templatePath, 'utf8');
                 slideContent += template.split('---').slice(2).join('---');
@@ -99,10 +94,10 @@ ${date}
             
             // Add global speaker notes if provided
             if (speakerNotes) {
-              slideContent += `\n\n<!-- 
-全体メモ:
-${speakerNotes}
--->`;
+              slideContent += '\n\n<!-- \n' +
+                '全体メモ:\n' +
+                speakerNotes + '\n' +
+                '-->';
             }
             
             // Write slide file
@@ -164,19 +159,15 @@ ${speakerNotes}
               owner: context.repo.owner,
               repo: context.repo.repo,
               issue_number: issueNumber,
-              body: `## ✅ スライドの生成が完了しました！
-              
-              Pull Requestが作成されました。以下のリンクから確認してください：
-              
-              🔗 **Pull Request**: #${context.payload.pull_request?.number || 'Creating...'}
-              📁 **ディレクトリ**: \`slides/${{ steps.generate.outputs.slide_dir }}/\`
-              
-              ### 次のアクション
-              1. PRをレビューして、必要に応じて編集
-              2. PRをマージしてHTML/PDFを自動生成
-              3. GitHub Pagesでプレビューを確認
-              
-              ご不明な点があれば、このIssueでお知らせください。`
+              body: '## ✅ スライドの生成が完了しました！\n\n' +
+                'Pull Requestが作成されました。以下のリンクから確認してください：\n\n' +
+                '🔗 **Pull Request**: #' + (context.payload.pull_request?.number || 'Creating...') + '\n' +
+                '📁 **ディレクトリ**: `slides/${{ steps.generate.outputs.slide_dir }}/`\n\n' +
+                '### 次のアクション\n' +
+                '1. PRをレビューして、必要に応じて編集\n' +
+                '2. PRをマージしてHTML/PDFを自動生成\n' +
+                '3. GitHub Pagesでプレビューを確認\n\n' +
+                'ご不明な点があれば、このIssueでお知らせください。'
             });
             
             // Close the issue
