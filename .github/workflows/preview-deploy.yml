@@ -124,12 +124,9 @@ jobs:
               echo "File content check:"
               head -n 5 "$dir/slide.md"
               
-              # Generate HTML and PDF with configuration file
+              # Generate HTML only
               echo "Generating HTML..."
               marp "$dir/slide.md" --html --output-dir "$OUTPUT_DIR"
-              
-              echo "Generating PDF..."  
-              marp "$dir/slide.md" --pdf --output-dir "$OUTPUT_DIR"
               
               # Copy images if exists
               if [ -d "$dir/images" ]; then
