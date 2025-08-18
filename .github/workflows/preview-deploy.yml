@@ -67,13 +67,21 @@ jobs:
           echo "EOF" >> $GITHUB_OUTPUT
       
       - name: Build slides
-        if: steps.changed.outputs.dirs != ''
         run: |
           # Create output directory
           mkdir -p build
           
-          # Process each changed slide directory
-          echo "${{ steps.changed.outputs.dirs }}" | while read -r dir; do
+          # Find all slide directories for building
+          if [ "${{ github.ref }}" = "refs/heads/main" ]; then
+            # On main branch, build all slides
+            DIRS_TO_BUILD=$(find slides -type d -name "20*" -maxdepth 1 2>/dev/null || true)
+          else
+            # On PR, build only changed slides
+            DIRS_TO_BUILD="${{ steps.changed.outputs.dirs }}"
+          fi
+          
+          # Process slide directories
+          echo "$DIRS_TO_BUILD" | while read -r dir; do
             if [ -n "$dir" ] && [ -f "$dir/slide.md" ]; then
               echo "Building $dir..."
               
