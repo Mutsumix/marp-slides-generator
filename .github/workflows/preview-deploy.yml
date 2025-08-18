@@ -103,6 +103,57 @@ jobs:
             fi
           done
       
+      - name: Ensure build directory with default content
+        if: github.ref == 'refs/heads/main'
+        run: |
+          mkdir -p build
+          if [ ! -f build/index.html ]; then
+            cat > build/index.html << 'EOF'
+          <!DOCTYPE html>
+          <html lang="ja">
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+            <title>Marp Slides Generator</title>
+            <style>
+              body {
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+                max-width: 800px;
+                margin: 0 auto;
+                padding: 2rem;
+                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+                min-height: 100vh;
+              }
+              .container {
+                background: white;
+                border-radius: 10px;
+                padding: 2rem;
+                box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+              }
+              h1 { color: #333; }
+              p { color: #666; line-height: 1.6; }
+              a { color: #667eea; text-decoration: none; }
+              a:hover { text-decoration: underline; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <h1>📊 Marp Slides Generator</h1>
+              <p>まだスライドがありません。</p>
+              <p>スライドを作成するには：</p>
+              <ol>
+                <li><a href="https://github.com/Mutsumix/marp-slides-generator/issues/new/choose">Issue を作成</a></li>
+                <li>フォームに必要事項を記入</li>
+                <li>AIでコンテンツを生成して貼り付け</li>
+                <li>自動的にPRが作成されます</li>
+              </ol>
+              <p><a href="https://github.com/Mutsumix/marp-slides-generator">→ リポジトリを見る</a></p>
+            </div>
+          </body>
+          </html>
+          EOF
+          fi
+      
       - name: Setup Pages (for main branch)
         if: github.ref == 'refs/heads/main'
         uses: actions/configure-pages@v4

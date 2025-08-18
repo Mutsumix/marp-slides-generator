@@ -181,7 +181,7 @@ body:
           required: false
         - label: ヘッダー/フッターを追加する
           required: false
-        - label: PDFにスピーカーノートを含める
+        - label: HTMLにスピーカーノートを含める
           required: false
 
   - type: checkboxes
