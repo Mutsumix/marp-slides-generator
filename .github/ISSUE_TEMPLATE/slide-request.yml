@@ -176,8 +176,15 @@ body:
       value: |
         ---
         
-        **🚀 自動処理を開始**
+        **🚀 自動処理開始**
         
-        フォームを送信すると、Claude for GitHubが自動的にスライド作成作業を開始します。
-        
-        @claude このIssueの内容に基づいて、スライドファイルの作成とPull Requestの生成を開始してください。
+        下記のメンション欄は自動的に入力されています。**編集せずにそのまま送信してください**。
+
+  - type: textarea
+    id: claude_mention
+    attributes:
+      label: 🤖 自動処理開始コマンド
+      description: "このメンションでClaude for GitHubが自動的にスライド作成を開始します。変更しないでください。"
+      value: "@claude このIssueの内容に基づいて、スライドファイルの作成とPull Requestの生成を開始してください。"
+    validations:
+      required: true
