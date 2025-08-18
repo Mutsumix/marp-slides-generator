@@ -94,24 +94,42 @@ jobs:
           echo "$DIRS_TO_BUILD" | while read -r dir; do
             if [ -n "$dir" ] && [ -f "$dir/slide.md" ]; then
               echo "Building $dir..."
+              echo "Current directory: $(pwd)"
+              echo "Input file: $dir/slide.md"
+              ls -la "$dir/"
               
               # Create output directory for this slide
               OUTPUT_DIR="build/$dir"
               mkdir -p "$OUTPUT_DIR"
+              echo "Output directory: $OUTPUT_DIR"
               
               # Generate HTML with speaker notes
-              marp "$dir/slide.md" \
-                --html \
-                --allow-local-files \
-                --theme-set ./themes \
-                -o "$OUTPUT_DIR/index.html"
-              
-              # Generate PDF
-              marp "$dir/slide.md" \
-                --pdf \
-                --allow-local-files \
-                --theme-set ./themes \
-                -o "$OUTPUT_DIR/slide.pdf"
+              if [ -d "./themes" ]; then
+                marp "$dir/slide.md" \
+                  --html \
+                  --allow-local-files \
+                  --theme-set ./themes \
+                  -o "$OUTPUT_DIR/index.html"
+                
+                # Generate PDF
+                marp "$dir/slide.md" \
+                  --pdf \
+                  --allow-local-files \
+                  --theme-set ./themes \
+                  -o "$OUTPUT_DIR/slide.pdf"
+              else
+                echo "Themes directory not found, building without custom themes"
+                marp "$dir/slide.md" \
+                  --html \
+                  --allow-local-files \
+                  -o "$OUTPUT_DIR/index.html"
+                
+                # Generate PDF
+                marp "$dir/slide.md" \
+                  --pdf \
+                  --allow-local-files \
+                  -o "$OUTPUT_DIR/slide.pdf"
+              fi
               
               # Copy images if exists
               if [ -d "$dir/images" ]; then
