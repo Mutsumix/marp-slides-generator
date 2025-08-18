@@ -58,15 +58,23 @@ jobs:
             # Get changed files in PR
             CHANGED_FILES=$(git diff --name-only origin/${{ github.base_ref }}...HEAD | grep '^slides/' || true)
           else
-            # Get changed files in push
-            CHANGED_FILES=$(git diff --name-only HEAD~1...HEAD | grep '^slides/' || true)
+            # Get changed files in push - use different methods based on commit count
+            if git rev-parse HEAD~1 >/dev/null 2>&1; then
+              # Multiple commits exist, compare with previous
+              CHANGED_FILES=$(git diff --name-only HEAD~1...HEAD | grep '^slides/' || true)
+            else
+              # First commit or single commit, check all files in slides/
+              CHANGED_FILES=$(git ls-tree -r --name-only HEAD | grep '^slides/' || true)
+            fi
           fi
           
           # Extract unique slide directories
           SLIDE_DIRS=$(echo "$CHANGED_FILES" | sed 's|/[^/]*$||' | sort -u | grep '^slides/' || true)
           
-          echo "Changed slide directories:"
-          echo "$SLIDE_DIRS"
+          echo "Debug info:"
+          echo "Event: ${{ github.event_name }}"
+          echo "Changed files: $CHANGED_FILES"
+          echo "Changed slide directories: $SLIDE_DIRS"
           
           # Save to output
           echo "dirs<<EOF" >> $GITHUB_OUTPUT
