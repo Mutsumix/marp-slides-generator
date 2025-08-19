@@ -26,6 +26,10 @@ GitHub IssuesでAIが生成したコンテンツを貼り付けるだけで、�
 
 1. このリポジトリをForkまたはテンプレートとして使用
 2. GitHub Pagesを有効化（Settings → Pages → Source: GitHub Actions）
+3. Claude GitHub Appをインストール
+   - [https://github.com/apps/claude](https://github.com/apps/claude) にアクセス
+   - **Install** をクリック
+   - インストール先のリポジトリを選択
 
 ### 2. スライドの作成
 
