@@ -24,12 +24,29 @@ GitHub IssuesでAIが生成したコンテンツを貼り付けるだけで、�
 
 ### 1. リポジトリのセットアップ
 
-1. このリポジトリをForkまたはテンプレートとして使用
-2. GitHub Pagesを有効化（Settings → Pages → Source: GitHub Actions）
-3. Claude GitHub Appをインストール
+1. **このリポジトリをForkまたはテンプレートとして使用**
+
+2. **GitHub Pagesを有効化**
+   - Settings → Pages → Source: GitHub Actions
+
+3. **Claude GitHub Appをインストール**
    - [https://github.com/apps/claude](https://github.com/apps/claude) にアクセス
    - **Install** をクリック
-   - インストール先のリポジトリを選択
+   - **Only select repositories** を選び、対象リポジトリにチェック
+   - 完了後、リポジトリの Settings → Integrations → GitHub Apps → Claude が **Installed** になっていることを確認
+
+4. **リポジトリにシークレットを追加**
+   - リポジトリの Settings → Security → Secrets and variables → Actions
+   - **New repository secret** をクリック
+   - Name: `ANTHROPIC_API_KEY`
+   - Secret: AnthropicのAPIキーを貼り付け
+   - **Add Secret** をクリック
+
+5. **ワークフロー権限を変更**
+   - リポジトリの Settings → Actions → General → Workflow permissions
+   - **Read and write permissions** を選択
+   - **Allow GitHub Actions to create and approve pull requests** をON（推奨）
+   - **Save** をクリック
 
 ### 2. スライドの作成
 
