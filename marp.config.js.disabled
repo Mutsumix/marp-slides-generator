@@ -1,9 +1,10 @@
+// 共通設定（HTML/PDF両方で使用）
 module.exports = {
-  // Basic configuration for GitHub Actions
+  // 基本設定
   allowLocalFiles: true,
   themeSet: './themes',
   
-  // Engine options
+  // エンジン設定
   options: {
     markdown: {
       breaks: true,

@@ -7,10 +7,10 @@
     "generate": "node scripts/generate-slide.js",
     "validate": "node scripts/validate-slide.js",
     "build": "marp --config marp.config.js slides/**/slide.md",
-    "build:html": "marp --config marp.config.js --html slides/**/slide.md",
+    "build:html": "marp --config marp.html.config.js --html slides/**/slide.md",
     "build:pdf": "marp --config marp.pdf.config.js --pdf slides/**/slide.md",
-    "watch": "marp --config marp.config.js --watch slides/**/slide.md",
-    "serve": "marp --config marp.config.js --server slides/**/slide.md",
+    "watch": "marp --config marp.html.config.js --watch slides/**/slide.md",
+    "serve": "marp --config marp.html.config.js --server slides/**/slide.md",
     "clean": "rm -rf slides/*/output/*",
     "lint:slides": "for slide in slides/*/slide.md; do node scripts/validate-slide.js \"$slide\"; done"
   },

@@ -1,0 +1,7 @@
+// HTML生成専用設定
+const baseConfig = require('./marp.config.js');
+
+module.exports = {
+  ...baseConfig,
+  // HTML専用設定（明示的にPDF設定を除外）
+};
