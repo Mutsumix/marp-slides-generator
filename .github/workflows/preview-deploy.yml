@@ -41,17 +41,15 @@ jobs:
           (git diff --name-only HEAD^ HEAD | grep -E "slides/.*\.md$" || true) >> $GITHUB_OUTPUT
           echo "EOF" >> $GITHUB_OUTPUT
       
-      - name: Build HTML slides
-        if: steps.files.outputs.files != ''
+      - name: Build all HTML slides
         run: |
           mkdir -p build
           
-          echo "Building slides:"
-          echo "${{ steps.files.outputs.files }}"
-          echo ""
+          echo "Building all slides (to prevent missing pages)..."
           
-          echo "${{ steps.files.outputs.files }}" | while IFS= read -r file; do
-            if [ -z "$file" ] || [ ! -f "$file" ]; then
+          # Build ALL slide.md files, not just changed ones
+          for file in slides/*/slide.md; do
+            if [ ! -f "$file" ]; then
               continue
             fi
             
