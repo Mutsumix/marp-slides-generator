@@ -93,7 +93,7 @@ footer: 'スライドを軽率に作成しよう | ムツミックス | 2025-08-
 ## 🏗️ 技術スタック
 
 ### 核となる4つのコンポーネント
-- **Claude GitHub App**: Issuesで@claudeメンションでAI作業
+- **Claude Code GitHub Actions**: Issuesで@claudeメンションでAI作業
 - **Marp**: Markdown → スライド変換エンジン  
 - **GitHub Actions**: 自動ビルド・デプロイパイプライン
 - **GitHub Pages**: Issue作成後すぐにプレビュー表示
@@ -101,7 +101,7 @@ footer: 'スライドを軽率に作成しよう | ムツミックス | 2025-08-
 <!-- 
 スピーカーノート:
 - 各技術の役割を30秒ずつ説明（2分）
-- Claude Code: 最新のGitHub Actions統合
+- Claude Code GitHub Actions: AIによるGitHub統合
 - Marp: シンプルなMarkdownベースのスライド作成
 - GitHub Actions: CI/CDでの自動化
 - GitHub Pages: 即座にプレビュー可能
@@ -111,22 +111,24 @@ footer: 'スライドを軽率に作成しよう | ムツミックス | 2025-08-
 
 ## 📋 実装手順（優先度順）
 
-### 1. Claude GitHub Appインストール（必須・最優先）
+### 1. リポジトリ準備（必須・最優先）
+- このリポジトリを**Fork**または**テンプレート使用**
+- 新規リポジトリ作成でもOK
 
-1. **[Claude GitHub App](https://github.com/apps/claude)** にアクセス
+### 2. Claude Code GitHub Actionsインストール
+1. **[Claude Code GitHub Actions](https://github.com/apps/claude-code)** にアクセス
 2. **Install** をクリック  
-3. インストール先のリポジトリを選択
+3. **先ほど作成したリポジトリ**を選択
 
-### 2. 基本リポジトリセットアップ
-- このリポジトリをForkまたはテンプレート使用
+### 3. 基本設定
 - GitHub Pagesを有効化（Settings → Pages → Source: GitHub Actions）
 - CLAUDE.md作成（リポジトリルールの定義）
 
 <!-- 
 スピーカーノート:
 - 実装の優先順位を説明（1分）
-- デモ環境があれば簡単にセットアップを見せる
-- セキュリティの重要性（API keyの取り扱い）
+- まずリポジトリがないと何も始まらない
+- Forkが最も簡単（設定含めて複製される）
 - CLAUDE.mdの役割：AIに与える指示書
 -->
 
