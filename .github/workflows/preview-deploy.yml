@@ -23,8 +23,6 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 2
       
       - name: Setup Node.js
         uses: actions/setup-node@v4
@@ -34,20 +32,13 @@ jobs:
       - name: Install Marp CLI
         run: npm install -g @marp-team/marp-cli@latest
       
-      - name: Find changed slides
-        id: files
-        run: |
-          echo "files<<EOF" >> $GITHUB_OUTPUT
-          (git diff --name-only HEAD^ HEAD | grep -E "slides/.*\.md$" || true) >> $GITHUB_OUTPUT
-          echo "EOF" >> $GITHUB_OUTPUT
-      
       - name: Build all HTML slides
         run: |
           mkdir -p build
           
-          echo "Building all slides (to prevent missing pages)..."
+          echo "Building all slides for complete site generation..."
           
-          # Build ALL slide.md files, not just changed ones
+          # Build ALL slide.md files to ensure complete site
           for file in slides/*/slide.md; do
             if [ ! -f "$file" ]; then
               continue
