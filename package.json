@@ -14,32 +14,11 @@
     "clean": "rm -rf slides/*/output/*",
     "lint:slides": "for slide in slides/*/slide.md; do node scripts/validate-slide.js \"$slide\"; done"
   },
-  "keywords": [
-    "marp",
-    "slides",
-    "presentation",
-    "markdown",
-    "github-actions",
-    "automation"
-  ],
-  "author": "",
-  "license": "MIT",
   "dependencies": {
     "@marp-team/marp-cli": "^3.4.0",
     "markdown-it-container": "^3.0.0"
   },
   "devDependencies": {
     "@marp-team/marp-core": "^3.9.0"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/Mutsumix/marp-slides-generator.git"
-  },
-  "bugs": {
-    "url": "https://github.com/Mutsumix/marp-slides-generator/issues"
-  },
-  "homepage": "https://github.com/Mutsumix/marp-slides-generator#readme",
-  "engines": {
-    "node": ">=18.0.0"
   }
 }
