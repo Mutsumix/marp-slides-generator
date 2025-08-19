@@ -76,7 +76,8 @@ footer: 'スライドを軽率に作成しよう | ムツミックス | 2025-08-
 </div>
 
 - **目標**: 布団から出ずにプレゼン準備完了
-- **仕組み**: GitHub Issues → Claude生成 → 自動PDF化
+- **起点**: **GitHub Issues** からスライド作成開始
+- **仕組み**: Issues → Claude生成 → 自動PDF化
 - **哲学**: 軽率な使用のための複雑な準備
 
 <!-- 
@@ -92,10 +93,10 @@ footer: 'スライドを軽率に作成しよう | ムツミックス | 2025-08-
 ## 🏗️ 技術スタック
 
 ### 核となる4つのコンポーネント
-- **Claude Code GitHub Actions**: @claudeメンションでAI作業
+- **Claude GitHub App**: Issuesで@claudeメンションでAI作業
 - **Marp**: Markdown → スライド変換エンジン  
 - **GitHub Actions**: 自動ビルド・デプロイパイプライン
-- **GitHub Pages**: ワンクリックプレビュー表示
+- **GitHub Pages**: Issue作成後すぐにプレビュー表示
 
 <!-- 
 スピーカーノート:
@@ -110,17 +111,15 @@ footer: 'スライドを軽率に作成しよう | ムツミックス | 2025-08-
 
 ## 📋 実装手順（優先度順）
 
-### 1. 基本セットアップ（必須・最優先）
+### 1. Claude GitHub Appインストール（必須・最優先）
 
-```bash
-npm install -g @anthropic-ai/claude-code
-claude
-/install-github-app
-```
+1. **[Claude GitHub App](https://github.com/apps/claude)** にアクセス
+2. **Install** をクリック  
+3. インストール先のリポジトリを選択
 
-### 2. 環境設定
-- `ANTHROPIC_API_KEY`をGitHub Secretsに追加
-- 基本workflowファイル生成
+### 2. 基本リポジトリセットアップ
+- このリポジトリをForkまたはテンプレート使用
+- GitHub Pagesを有効化（Settings → Pages → Source: GitHub Actions）
 - CLAUDE.md作成（リポジトリルールの定義）
 
 <!-- 
@@ -135,20 +134,24 @@ claude
 
 ## 📝 Issue Template設計
 
-### 実際のテンプレート例
+### **Issue Templates** が起点の核心
 
 ```yaml
 ---
-name: 🛏️ 布団スライド作成
-about: 寝ながらスライド作成
+name: 🛏️ 新規スライド作成
+about: GitHub Issueからスライドを自動生成
 title: "[SLIDE] "
 ---
 
-**タイトル:** 
-**時間:** [ ] 5分 [ ] 10分 [ ] 30分
-**テーマ:** [ ] tech [ ] business [ ] casual
+**プレゼンタイトル:** 
+**発表時間:** [ ] 5分 [ ] 10分 [ ] 30分
+**テーマ:** [ ] standard [ ] business [ ] casual
+**対象者:** 
 
-@claude 上記でスライド作って
+**コンテンツ:**
+（AI生成したMarkdownコンテンツをここに貼り付け）
+
+@claude 上記の設定でスライドを作成してください
 ```
 
 <!-- 
@@ -214,13 +217,14 @@ slides/
 
 ## 🔄 実際の使用フロー
 
-### スマホから5ステップ
+### **起点はIssue作成から！** 🎯
 
-1. **GitHub mobile**でIssue作成
-2. **テンプレート選択**・内容入力  
-3. **@claudeメンション**投稿
-4. **1-3分待機**（コーヒータイム☕）
-5. **プレビューURL**で確認
+1. **[Issues タブ](https://github.com/Mutsumix/marp-slides-generator/issues/new/choose)**で新しいスライド作成
+2. **「新規スライド作成」テンプレート**選択
+3. **フォーム入力**：タイトル・テーマ・時間・内容
+4. **@claudeメンション**でAI作業開始
+5. **1-3分待機**（コーヒータイム☕）
+6. **プレビューURL**で確認・修正
 
 ### 修正が必要な場合
 - Issueにコメントで修正指示 → @claudeで再生成
