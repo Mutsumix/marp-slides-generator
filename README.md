@@ -86,27 +86,6 @@ Claude/ChatGPTに以下のようなプロンプトを使用：
 
 ```
 
-## 使い方
-
-### ローカルでの開発
-
-```bash
-# 依存関係のインストール
-npm install
-
-# スライドのビルド（HTML）
-npm run build:html
-
-# スライドのビルド（PDF）
-npm run build:pdf
-
-# 開発サーバーの起動
-npm run serve
-
-# スライドの検証
-npm run lint:slides
-```
-
 ## ガイドライン
 
 詳細なスライド作成ガイドラインは [CLAUDE.md](./CLAUDE.md) を参照してください。
@@ -145,17 +124,6 @@ section {
 ### テンプレートの編集
 
 `templates/` ディレクトリのMarkdownファイルを編集して、デフォルトのスライド構造をカスタマイズできます。
-
-## コントリビューション
-
-Issue や Pull Request は大歓迎です。
-
-### 開発の流れ
-
-1. Issueで議論
-2. Forkしてブランチ作成
-3. 変更を実装
-4. Pull Requestを作成
 
 ## ライセンス
 
