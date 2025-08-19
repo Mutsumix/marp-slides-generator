@@ -1,27 +1,26 @@
-# 📊 Marp Slides Generator
+# Marp Slides Generator
 
-「軽率にスライドを作成しよう」 - Marp + GitHub Actions + Claudeを使った自動スライド生成システム
+Marp + GitHub Actions を使った自動スライド生成システム
 
-## 🌐 ライブデモ
+## ライブデモ
 
-📋 **[スライド一覧を見る](https://mutsumix.github.io/marp-slides-generator/)** - 作成されたスライドの確認とプレビュー
+- **[スライド一覧](https://mutsumix.github.io/marp-slides-generator/)** - 作成されたスライドの確認とプレビュー
+- **[新しいスライドを作成](https://github.com/Mutsumix/marp-slides-generator/issues/new/choose)** - Issue作成で自動生成開始
 
-🚀 **[新しいスライドを作成する](https://github.com/Mutsumix/marp-slides-generator/issues/new/choose)** - Issue作成で自動生成開始
+## 概要
 
-## 🎯 概要
-
-このツールは、GitHub IssuesでAI（Claude/ChatGPT）が生成したコンテンツを貼り付けるだけで、自動的にプレゼンテーションスライドを作成し、GitHub Actionsでビルド・デプロイするシステムです。
+GitHub IssuesでAIが生成したコンテンツを貼り付けるだけで、自動的にプレゼンテーションスライドを作成し、GitHub Actionsでビルド・デプロイするシステムです。
 
 ### 特徴
 
-- 📝 **簡単な作成フロー**: GitHub Issueフォームに入力するだけ
-- 🤖 **AI活用**: Claude/ChatGPTでコンテンツ生成
-- 🚀 **自動化**: GitHub Actionsで自動ビルド・デプロイ
-- 📱 **マルチデバイス対応**: HTML出力でスマホからも確認可能
-- 📄 **複数フォーマット**: HTML（スピーカーノート付き）とPDF出力
-- 🎨 **テンプレート**: 5分/10分/30分用のテンプレート付き
+- **簡単な作成フロー**: GitHub Issueフォームに入力するだけ
+- **AI活用**: Claude/ChatGPTでコンテンツ生成
+- **自動化**: GitHub Actionsで自動ビルド・デプロイ
+- **マルチデバイス対応**: HTML出力でスマホからも確認可能
+- **複数フォーマット**: HTML（スピーカーノート付き）とPDF出力
+- **テンプレート**: 5分/10分/30分用のテンプレート付き
 
-## 🚀 クイックスタート
+## クイックスタート
 
 ### 1. リポジトリのセットアップ
 
@@ -31,7 +30,7 @@
 ### 2. スライドの作成
 
 1. **Issues** タブから **New issue** をクリック
-2. **📊 新規スライド作成** テンプレートを選択
+2. **新規スライド作成** テンプレートを選択
 3. フォームに必要事項を入力：
    - プレゼンタイトル
    - テーマ（standard/business/casual）
@@ -63,7 +62,7 @@ Claude/ChatGPTに以下のようなプロンプトを使用：
 2. PRでスライドの内容を確認・編集
 3. マージするとGitHub Pagesで公開されます
 
-## 📁 ディレクトリ構造
+## ディレクトリ構造
 
 ```
 .
@@ -87,7 +86,7 @@ Claude/ChatGPTに以下のようなプロンプトを使用：
 
 ```
 
-## 📖 使い方
+## 使い方
 
 ### ローカルでの開発
 
@@ -108,12 +107,7 @@ npm run serve
 npm run lint:slides
 ```
 
-### スクリプト
-
-- `generate-slide.js`: Issueからスライドを生成
-- `validate-slide.js`: ガイドラインに基づいてスライドを検証
-
-## 📝 ガイドライン
+## ガイドライン
 
 詳細なスライド作成ガイドラインは [CLAUDE.md](./CLAUDE.md) を参照してください。
 
@@ -131,7 +125,7 @@ npm run lint:slides
 - **10分**: 15-20枚  
 - **30分**: 40-50枚
 
-## 🎨 カスタマイズ
+## カスタマイズ
 
 ### テーマの追加
 
@@ -152,9 +146,9 @@ section {
 
 `templates/` ディレクトリのMarkdownファイルを編集して、デフォルトのスライド構造をカスタマイズできます。
 
-## 🤝 コントリビューション
+## コントリビューション
 
-Issue や Pull Request は大歓迎です！
+Issue や Pull Request は大歓迎です。
 
 ### 開発の流れ
 
@@ -163,22 +157,10 @@ Issue や Pull Request は大歓迎です！
 3. 変更を実装
 4. Pull Requestを作成
 
-## 📄 ライセンス
+## ライセンス
 
 MIT License
 
-## 🙏 謝辞
+## 謝辞
 
-- [Marp](https://marp.app/) - Markdownプレゼンテーションエコシステム
-- [GitHub Actions](https://github.com/features/actions) - CI/CDプラットフォーム
-- [Claude](https://claude.ai/) / [ChatGPT](https://chat.openai.com/) - AIコンテンツ生成
-
-## 📚 関連リンク
-
-- [Marp公式ドキュメント](https://marpit.marp.app/)
-- [GitHub Actions ドキュメント](https://docs.github.com/ja/actions)
-- [Markdown記法](https://www.markdownguide.org/)
-
----
-
-Made with ❤️ using Marp + GitHub Actions + Claude
+[Marp](https://marp.app/) - Markdownプレゼンテーションエコシステム

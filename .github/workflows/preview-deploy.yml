@@ -76,76 +76,154 @@ jobs:
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Marp Slides Generator - スライド一覧</title>
             <style>
+              /* デザイン庁スタイルに基づくデザインシステム */
+              :root {
+                --color-primary: #0969DA;
+                --color-primary-hover: #0550AE;
+                --color-gray-50: #F8F9FA;
+                --color-gray-100: #F1F3F4;
+                --color-gray-500: #6A737D;
+                --color-gray-900: #24292F;
+                --font-size-h1: 2rem;
+                --font-size-body: 1rem;
+                --font-size-small: 0.875rem;
+                --spacing-2: 0.5rem;
+                --spacing-3: 0.75rem;
+                --spacing-4: 1rem;
+                --spacing-6: 1.5rem;
+                --spacing-8: 2rem;
+                --border-radius: 0.5rem;
+              }
+              
+              * {
+                box-sizing: border-box;
+              }
+              
               body {
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-                max-width: 1000px;
-                margin: 0 auto;
-                padding: 2rem;
-                background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-                min-height: 100vh;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Noto Sans JP', Roboto, sans-serif;
+                line-height: 1.6;
+                color: var(--color-gray-900);
+                background-color: var(--color-gray-50);
+                margin: 0;
+                padding: var(--spacing-4);
               }
+              
               .container {
+                max-width: 1200px;
+                margin: 0 auto;
                 background: white;
-                border-radius: 15px;
-                padding: 3rem;
-                box-shadow: 0 25px 50px rgba(0,0,0,0.15);
+                padding: var(--spacing-8);
+                border-radius: var(--border-radius);
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
               }
-              h1 { 
-                color: #333; 
+              
+              .header {
                 text-align: center;
-                margin-bottom: 2rem;
-                font-size: 2.5rem;
+                margin-bottom: var(--spacing-8);
+                padding-bottom: var(--spacing-6);
+                border-bottom: 1px solid var(--color-gray-100);
               }
+              
+              h1 {
+                font-size: var(--font-size-h1);
+                font-weight: 700;
+                color: var(--color-gray-900);
+                margin: 0 0 var(--spacing-3) 0;
+                letter-spacing: -0.025em;
+              }
+              
+              .subtitle {
+                color: var(--color-gray-500);
+                font-size: var(--font-size-body);
+                margin: 0;
+              }
+              
               .slides-grid {
                 display: grid;
-                grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-                gap: 2rem;
-                margin: 2rem 0;
+                grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+                gap: var(--spacing-6);
               }
+              
               .slide-card {
-                background: #f8f9fa;
-                border-radius: 10px;
-                padding: 1.5rem;
-                border-left: 4px solid #667eea;
-                transition: all 0.3s ease;
-              }
-              .slide-card:hover {
-                transform: translateY(-2px);
-                box-shadow: 0 8px 25px rgba(0,0,0,0.1);
-              }
-              .slide-title {
-                font-size: 1.2rem;
-                font-weight: 600;
-                color: #333;
-                margin-bottom: 0.5rem;
-              }
-              .slide-date {
-                color: #666;
-                font-size: 0.9rem;
-                margin-bottom: 1rem;
-              }
-              .slide-links a {
-                padding: 0.5rem 1rem;
-                border-radius: 6px;
-                text-decoration: none;
-                font-weight: 500;
-                background: #667eea;
-                color: white;
+                background: white;
+                border: 1px solid var(--color-gray-100);
+                border-radius: var(--border-radius);
+                padding: var(--spacing-6);
                 transition: all 0.2s ease;
               }
-              .slide-links a:hover {
-                background: #5a67d8;
+              
+              .slide-card:hover {
+                border-color: var(--color-primary);
+                box-shadow: 0 4px 12px rgba(9, 105, 218, 0.1);
               }
+              
+              .slide-title {
+                font-size: 1.125rem;
+                font-weight: 600;
+                color: var(--color-gray-900);
+                margin: 0 0 var(--spacing-2) 0;
+              }
+              
+              .slide-date {
+                color: var(--color-gray-500);
+                font-size: var(--font-size-small);
+                margin: 0 0 var(--spacing-4) 0;
+              }
+              
+              .slide-links {
+                display: flex;
+                gap: var(--spacing-3);
+              }
+              
+              .btn {
+                display: inline-flex;
+                align-items: center;
+                padding: var(--spacing-2) var(--spacing-4);
+                border-radius: var(--border-radius);
+                text-decoration: none;
+                font-size: var(--font-size-small);
+                font-weight: 500;
+                transition: all 0.2s ease;
+                border: 1px solid;
+              }
+              
+              .btn-primary {
+                background-color: var(--color-primary);
+                color: white;
+                border-color: var(--color-primary);
+              }
+              
+              .btn-primary:hover {
+                background-color: var(--color-primary-hover);
+                border-color: var(--color-primary-hover);
+              }
+              
               .no-slides {
                 text-align: center;
-                color: #666;
-                margin: 2rem 0;
+                padding: var(--spacing-8);
+                color: var(--color-gray-500);
+              }
+              
+              @media (max-width: 768px) {
+                body {
+                  padding: var(--spacing-2);
+                }
+                .container {
+                  padding: var(--spacing-4);
+                }
+                .slides-grid {
+                  grid-template-columns: 1fr;
+                  gap: var(--spacing-4);
+                }
               }
             </style>
           </head>
           <body>
             <div class="container">
-              <h1>📊 Marp Slides Generator</h1>
+              <header class="header">
+                <h1>Marp Slides Generator</h1>
+                <p class="subtitle">プレゼンテーションスライド一覧</p>
+              </header>
           EOF
           
           # Add slides list or no-slides message
@@ -176,9 +254,9 @@ jobs:
               echo '          <div class="slide-links">' >> build/index.html
               
               if [ "$HTML_EXISTS" = "true" ]; then
-                echo "            <a href=\"$dir/index.html\">📄 HTMLスライド</a>" >> build/index.html
+                echo "            <a href=\"$dir/index.html\" class=\"btn btn-primary\">HTMLスライド</a>" >> build/index.html
               else
-                echo "            <span style=\"color: #999;\">ビルド待ち...</span>" >> build/index.html
+                echo "            <span style=\"color: var(--color-gray-500);\">ビルド待ち...</span>" >> build/index.html
               fi
               
               echo '          </div>' >> build/index.html
@@ -189,7 +267,8 @@ jobs:
           else
             cat >> build/index.html << 'EOF'
               <div class="no-slides">
-                <p>📭 まだスライドがありません</p>
+                <p>まだスライドがありません</p>
+                <p>スライドを作成すると、ここに表示されます。</p>
               </div>
           EOF
           fi
