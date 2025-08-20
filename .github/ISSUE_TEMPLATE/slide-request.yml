@@ -1,6 +1,6 @@
 name: 📊 新規スライド作成
 description: Marpを使用して新しいプレゼンテーションスライドを作成します
-title: "[Slide] "
+title: " "
 labels: ["slide-request", "automation"]
 assignees: []
 body:
@@ -29,7 +29,7 @@ body:
   - type: input
     id: title_ja
     attributes:
-      label: 📋 プレゼンタイトル（日本語）
+      label: 📋 プレゼンタイトル
       description: スライドの実際のタイトルとして表示されます
       placeholder: "私のプレゼンテーション"
     validations:
@@ -53,7 +53,7 @@ body:
     attributes:
       label: ⏱️ 発表時間
       description: |
-        時間に応じたテンプレートが適用されます
+        時間に応じたスライド枚数のテンプレートが適用されます
         - 5分: 8-10枚（LT向け）
         - 10分: 15-20枚（ショートトーク）
         - 30分: 40-50枚（通常セッション）
@@ -61,7 +61,7 @@ body:
         - "5"
         - "10"
         - "30"
-      default: 1
+      default: 0
     validations:
       required: true
 
@@ -70,7 +70,7 @@ body:
     attributes:
       label: 👤 発表者名
       description: スライドに表示される発表者の名前
-      placeholder: "山田太郎"
+      placeholder: "田中 太郎"
     validations:
       required: true
 
@@ -87,8 +87,8 @@ body:
     id: date
     attributes:
       label: 📅 発表日（任意）
-      description: プレゼンテーションの予定日（YYYY-MM-DD形式）
-      placeholder: "2024-12-25"
+      description: 発表予定日（YYYY-MM-DD形式）未記入の場合は本日の日付が設定されます
+      placeholder: "2025-08-20"
     validations:
       required: false
 
@@ -97,9 +97,9 @@ body:
     attributes:
       label: 📝 スライド内容
       description: |
-        Claude/ChatGPTで生成したMarkdown形式のスライド内容を貼り付けてください。
+        ChatGPTなどで生成したMarkdown形式のスライド内容を貼り付けてください。
         
-        **AIへの推奨プロンプト例：**
+        **コピペで使えるAIへの推奨プロンプト例：**
         ```
         以下のガイドラインに従って、[時間]分のプレゼンテーションスライドをMarp形式のMarkdownで作成してください。
         
@@ -112,34 +112,10 @@ body:
         - 各スライドにスピーカーノートを含める
         - --- でスライドを区切る
         
-        内容: [話したい内容の概要]
+        内容: [作成したスライド資料の概要]
         ```
       placeholder: |
-        ---
-        # タイトル
-        
-        サブタイトル
-        
-        発表者: 名前
-        日付: 2024-12-01
-        
-        ---
-        
-        # アジェンダ
-        
-        1. 項目1
-        2. 項目2
-        3. 項目3
-        
-        <!-- 
-        スピーカーノート:
-        - ポイント1
-        - ポイント2
-        -->
-        
-        ---
-        
-        # 内容...
+        「おまかせ」でも作成可能です
       render: markdown
     validations:
       required: true
@@ -148,11 +124,9 @@ body:
     id: resources
     attributes:
       label: 🔗 参考リソース（任意）
-      description: 参考URL、論文、書籍などのリソース
+      description: 参考URLなどのリソース
       placeholder: |
         - https://example.com/reference
-        - 書籍: タイトル（著者名）
-        - 論文: タイトル（年）
     validations:
       required: false
 
@@ -160,31 +134,18 @@ body:
     id: options
     attributes:
       label: ⚙️ オプション
-      description: 追加の設定オプション
+      description: 追加の設定オプション（未実装）
       options:
         - label: ページ番号を表示する
           required: false
-        - label: プログレスバーを表示する
-          required: false
         - label: ヘッダー/フッターを追加する
-          required: false
-        - label: HTMLにスピーカーノートを含める
           required: false
 
   - type: markdown
     attributes:
       value: |
         ---
+                
+        @claude がこのIssueの内容に基づいて、スライドファイルの作成を行います。
         
-        **🚀 自動処理開始**
-        
-        下記のメンション欄は自動的に入力されています。**編集せずにそのまま送信してください**。
-
-  - type: textarea
-    id: claude_mention
-    attributes:
-      label: 🤖 自動処理開始コマンド
-      description: "このメンションでClaude for GitHubが自動的にスライド作成を開始します。変更しないでください。"
-      value: "@claude このIssueの内容に基づいて、スライドファイルの作成とPull Requestの生成を開始してください。"
-    validations:
-      required: true
+        完了後、Pull Requestを作成してください。

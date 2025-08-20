@@ -150,7 +150,7 @@ section.section-title h1::before {
   transition: all 0.3s ease;
 }
 
-/* McKinsey風の戦略グリッド */
+/* 戦略グリッド */
 .strategy-grid {
   display: grid;
   grid-template-columns: repeat(2, 1fr);

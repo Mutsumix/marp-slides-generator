@@ -118,6 +118,15 @@ section.cover h2 {
   position: relative;
 }
 
+section.cover h3 {
+  color: rgba(255,255,255,0.95);
+  font-size: 1.4rem;
+  margin-top: 1rem;
+  border: none;
+  z-index: 1;
+  position: relative;
+}
+
 /* ビジネス向けセクションタイトル */
 section.section-title {
   background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
@@ -143,6 +152,18 @@ section.section-title h1 {
 }
 
 section.section-title h1::before {
+  display: none;
+}
+
+section.section-title h2 {
+  color: white;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  line-height: 1.2;
+  margin: 0.5rem;
+}
+
+section.section-title h2::before {
   display: none;
 }
 

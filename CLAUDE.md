@@ -76,7 +76,7 @@ paginate: true
 ```
 
 #### 戦略グリッド (`.strategy-grid`)
-McKinsey風の2×2マトリックスや戦略的な分析に使用
+戦略的な分析に使用
 ```markdown
 <!-- _class: strategy-grid -->
 

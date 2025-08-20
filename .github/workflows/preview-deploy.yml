@@ -76,7 +76,7 @@ jobs:
             <meta name="viewport" content="width=device-width, initial-scale=1.0">
             <title>Marp Slides Generator - スライド一覧</title>
             <style>
-              /* デザイン庁スタイルに基づくデザインシステム */
+              /* デザインシステム */
               :root {
                 --color-primary: #0969DA;
                 --color-primary-hover: #0550AE;
