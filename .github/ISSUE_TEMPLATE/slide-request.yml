@@ -13,7 +13,8 @@ body:
         1. スライドディレクトリを作成（`slides/yyyy-MM-dd-title/`形式）
         2. Markdownスライドファイルを生成
         3. Pull Requestを作成
-        4. HTML/PDFを自動生成
+        4. HTMLでプレビューページを自動生成
+        5. PDF/pptxを生成したい場合はローカル環境で生成してください
 
   - type: input
     id: title
