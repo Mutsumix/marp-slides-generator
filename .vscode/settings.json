@@ -1,0 +1,7 @@
+{
+    "markdown.marp.themes": [
+        "./themes/standard.css",
+        "./themes/business.css",
+        "./themes/casual.css"
+    ]
+}
