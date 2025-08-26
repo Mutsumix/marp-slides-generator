@@ -234,7 +234,16 @@ jobs:
               # Extract date and title from directory name
               BASENAME=$(basename "$dir")
               DATE_PART=$(echo "$BASENAME" | cut -d'-' -f1-3)
-              TITLE_PART=$(echo "$BASENAME" | cut -d'-' -f4- | tr '-' ' ')
+              
+              # Extract Japanese title from slide.md if exists
+              if [ -f "$dir/slide.md" ]; then
+                TITLE_PART=$(grep -m 1 '^# ' "$dir/slide.md" | sed 's/^# //')
+              fi
+              
+              # Fallback to directory name if no title found
+              if [ -z "$TITLE_PART" ]; then
+                TITLE_PART=$(echo "$BASENAME" | cut -d'-' -f4- | tr '-' ' ')
+              fi
               
               # Format date
               YEAR=$(echo "$DATE_PART" | cut -d'-' -f1)
