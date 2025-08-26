@@ -1,6 +1,6 @@
 name: 📊 新規スライド作成
 description: Marpを使用して新しいプレゼンテーションスライドを作成します
-title: "スライド作成依頼 @claude"
+title: "スライド作成依頼 @claude"  # ⚠️ 重要: @claudeは絶対に削除しないでください。削除するとClaudeが自動起動しません
 labels: ["slide-request", "automation"]
 assignees: []
 body:
